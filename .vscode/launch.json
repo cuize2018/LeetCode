@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Solution347",
+            "request": "launch",
+            "mainClass": "leet.Solution347"
+        }
+    ]
+}
