@@ -38,5 +38,4 @@ public class Solution365{
             return gcd(y, x % y);
         }
     }
-
 }
