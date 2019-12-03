@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Solution365",
+            "request": "launch",
+            "mainClass": "leet.Solution365",
+            "projectName": "LeetCode_2f932377"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Solution357",
             "request": "launch",
             "mainClass": "leet.Solution357",
