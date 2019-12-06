@@ -20,11 +20,11 @@ public class Solution373 {
             }
         });
 
-        for (int i = 0;i<nums1.length;i++){
-            for (int j = 0;j<nums2.length;j++){
+        for (int item : nums1) {
+            for (int value : nums2) {
                 List<Integer> temp = new ArrayList<>();
-                temp.add(nums1[i]);
-                temp.add(nums2[j]);
+                temp.add(item);
+                temp.add(value);
                 heap.add(temp);
             }
         }
