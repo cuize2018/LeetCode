@@ -3,7 +3,7 @@ package leet;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Soluton424 {
+public class Solution424 {
     public static void main(String[] args) {
     }
 
