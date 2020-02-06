@@ -1,5 +1,7 @@
 package leet;
 
+import java.util.Random;
+
 public class Solution470 {
     public static void main(String[] args) {
         System.out.println(rand10());
@@ -30,4 +32,10 @@ public class Solution470 {
             return num2 + 5;
         }
     }
+
+    public static int rand7(){
+        Random random = new Random();
+        return random.nextInt(7)+1;
+    }
+
 }
