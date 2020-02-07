@@ -14,6 +14,11 @@ public class Solution473 {
 
     }
 
+    /**
+     * 深度优先
+     * @param nums
+     * @return
+     */
     public boolean makesquare(int[] nums) {
         if (nums.length < 4)return false;
 
