@@ -14,6 +14,12 @@ public class Solution524 {
         System.out.println(findLongestWord(s,d));
     }
 
+    /**
+     * 即找出list中每个字符串是否是str的字串，找出最长的字串，若长度相同则返回字典序最小的
+     * @param s
+     * @param d
+     * @return
+     */
     public static String findLongestWord(String s, List<String> d) {
         String out_str = "";
         for (String str : d){
