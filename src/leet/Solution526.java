@@ -18,12 +18,12 @@ public class Solution526 {
             set.add(i);
         }
 
-        helper(N, 1);
+        helper(1);
         return count;
     }
 
 
-    public void helper(int N, int index){
+    public void helper(int index){
         if (set.isEmpty()){
             count++;
             return;
@@ -35,7 +35,7 @@ public class Solution526 {
             if (index % val == 0 || val % index == 0){
 //                list.add(val);
                 set.remove(k);
-                helper(N, index+1);
+                helper(index+1);
 
                 set.add(k, val);
 //                list.remove(list.size()-1);
