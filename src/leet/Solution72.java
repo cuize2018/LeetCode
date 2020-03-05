@@ -10,6 +10,12 @@ public class Solution72 {
         System.out.println(minDistance(a,ros));
     }
 
+    /**
+     * dp[i][j] 代表 word1 到 i 位置转换成 word2 到 j 位置需要最少步数
+     * @param word1
+     * @param word2
+     * @return
+     */
     public static int minDistance(String word1, String word2) {
         if (word1.length() == 0 || word2.length() == 0){
             return word1.length()+word2.length();
