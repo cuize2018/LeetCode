@@ -31,14 +31,12 @@ public class Solution51 {
         }
         helper(0);
         return out;
-
     }
 
     /**
      * path: board in [0, row -1]
      * choices for a row : every cols
      * time to end: row == board.length
-     *
      * @param row
      */
     public void helper(int row) {
