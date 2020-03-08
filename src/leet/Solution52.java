@@ -56,4 +56,47 @@ public class Solution52 {
     }
 
 
+    /**
+     * 动态规划
+     * @param n
+     * @return
+     */
+    public int totalNQueens2(int n) {
+        //每一行放置皇后的列的位置
+        int[] temp = new int[n];
+        queenHelper(0, temp, n);
+        return count;
+    }
+
+    private void queenHelper(int row, int[] temp, int n) {
+        if (row == n){
+           count++;
+           return;
+        }
+
+        for (int col = 0; col < n; col++) {
+            boolean isOk = checkIsValid(temp, row, col);
+            if (isOk){
+                temp[row] = col;
+                queenHelper(row+1, temp, n);
+                temp[row] = 0;
+            }
+        }
+    }
+
+
+    private boolean checkIsValid(int[] temp, int row, int col) {
+        for (int k = 0; k < row; k++) {
+            if (temp[k] == col){
+                return false;
+            }
+
+            if (Math.abs(k-row) == Math.abs(temp[k] - col)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }
