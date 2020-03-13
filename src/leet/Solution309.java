@@ -1,12 +1,13 @@
 package leet;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 public class Solution309 {
     public static void main(String[] args) {
-        int[] prices = {6,1,6,4,3,0,2};
-        System.out.println(maxProfit2(prices));
+        int[] prices = {1,2,3,0,2};
+        System.out.println(maxProfit4(prices));
 
     }
 
@@ -97,7 +98,7 @@ public class Solution309 {
      * @param prices
      * @return
      */
-    int maxProfit3(int[] prices) {
+    public  static int maxProfit3(int[] prices) {
         // dpi0表示第i天手中持有股票的最大获利
         // dpi1表示第i天手中无股票的最大获利
         // dpi2表示第i天手中无股票且不卖出股票的最大获利
@@ -112,4 +113,28 @@ public class Solution309 {
 
         return Math.max(dpi1, dpi2);
     }
+
+    public static int maxProfit4(int[] prices) {
+        int n = prices.length;
+        if (n == 0)return 0;
+
+        int[][] dp = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            if (i == 0){
+                dp[i][0] = 0;
+                dp[i][1] = -prices[0];
+            }
+            else if (i == 1){
+                dp[i][0] = Math.max(dp[i-1][0], dp[i-1][1] + prices[i]);
+                dp[i][1] = Math.max(dp[i-1][1], - prices[i]);
+            }
+            else {
+                dp[i][0] = Math.max(dp[i-1][0], dp[i-1][1] + prices[i]);
+                //解释：第 i 天选择 buy 的时候，要从 i-2 的状态转移，而不是 i-1 。
+                dp[i][1] = Math.max(dp[i-1][1], dp[i-2][0] - prices[i]);
+            }
+        }
+        return dp[n-1][0];
+    }
+
 }
