@@ -49,23 +49,4 @@ public class Solution188 {
 
 
 
-    public static int maxProfit2(int k, int[] prices) {
-        int n = prices.length;
-        if (n == 0) return 0;
-
-        int dp_i_j_0 = 0;
-        int dp_i_j_1 = -prices[0];
-
-        for (int price : prices) {
-            for (int j = k; j >= 1; j--) {
-                int temp = dp_i_j_0;
-                dp_i_j_0 = Math.max(dp_i_j_0, dp_i_j_1 + price);
-                dp_i_j_1 = Math.max(dp_i_j_1, temp - price);
-            }
-        }
-
-        return dp_i_j_0;
-    }
-
-
 }
