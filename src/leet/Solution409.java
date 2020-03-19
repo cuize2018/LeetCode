@@ -46,7 +46,7 @@ public class Solution409 {
     }
 
     //字符有偶数个就全算上，奇数个就减1全算上，最终若有数量为1的字符则加1
-    //A-Z的ascii和a-z的ascii不连续,所以需要补齐中间的6个字符
+    //A-Z的ascii和a-z的ascii不连续,所以需要补齐中间的6个字符。
     public static int longestPalindrome2(String s) {
         int[] map = new int[26*2+6];
         for (char c : s.toCharArray()) {
