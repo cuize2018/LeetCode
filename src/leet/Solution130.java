@@ -64,49 +64,38 @@ public class Solution130 {
 
     private void BFS(char[][] board, int row, int col) {
         Queue<Pair> queue = new ArrayDeque<>();
-        Set<Pair> visited = new HashSet<>();
-
         Pair start = new Pair(row, col);
+
         queue.add(start);
-        visited.add(start);
+        board[row][col] = '#';
 
         while (!queue.isEmpty()) {
             Pair point = queue.remove();
             int x = point.getX();
             int y = point.getY();
-            board[x][y] = '#';
 
             if (x > 0 && board[x - 1][y] == 'O') {
                 Pair temp = new Pair(x - 1, y);
-                if (!visited.contains(temp)) {
-                    queue.add(temp);
-                    visited.add(temp);
-                }
+                queue.add(temp);
+                board[x - 1][y] = '#';
             }
 
             if (x < board.length - 1 && board[x + 1][y] == 'O') {
                 Pair temp = new Pair(x + 1, y);
-                if (!visited.contains(temp)) {
-                    queue.add(temp);
-                    visited.add(temp);
-                }
+                queue.add(temp);
+                board[x + 1][y] = '#';
             }
 
             if (y > 0 && board[x][y - 1] == 'O') {
-
                 Pair temp = new Pair(x, y - 1);
-                if (!visited.contains(temp)) {
-                    queue.add(temp);
-                    visited.add(temp);
-                }
+                queue.add(temp);
+                board[x][y - 1] = '#';
             }
 
             if (y < board[row].length - 1 && board[x][y + 1] == 'O') {
                 Pair temp = new Pair(x, y + 1);
-                if (!visited.contains(temp)) {
-                    queue.add(temp);
-                    visited.add(temp);
-                }
+                queue.add(temp);
+                board[x][y + 1] = '#';
             }
         }
     }
