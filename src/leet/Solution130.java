@@ -60,6 +60,7 @@ public class Solution130 {
                 }
             }
         }
+
     }
 
     private void BFS(char[][] board, int row, int col) {
