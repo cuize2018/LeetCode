@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Solution213 {
     public static void main(String[] args){
-        int[] a = {1,2,3,1};
+        int[] a = {2,3,2};
         System.out.println(rob(a));
     }
 
@@ -19,7 +19,7 @@ public class Solution213 {
         int[] nums1 = Arrays.copyOfRange(nums, 0, nums.length-1);
         int[] nums2 = Arrays.copyOfRange(nums, 1, nums.length);
 
-        return Math.max(rob_no_circle(nums1), rob_no_circle(nums2));
+        return Math.max(rob2(nums1), rob2(nums2));
 
     }
 
@@ -35,5 +35,20 @@ public class Solution213 {
             else dp[i] = Math.max(dp[i-2]+nums[i], dp[i-1]);
         }
         return dp[n-1];
+    }
+
+
+    public static int rob2(int[] nums) {
+        int n = nums.length;
+        if (n == 0)return 0;
+
+        int[][] dp = new int[n+1][2];
+
+        for (int i = 1; i <= n; i++) {
+            dp[i][0] = Math.max(dp[i-1][0], dp[i-1][1]);
+            dp[i][1] = dp[i-1][0] + nums[i-1];
+        }
+
+        return Math.max(dp[n][0],dp[n][1]);
     }
 }
