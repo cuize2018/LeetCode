@@ -118,4 +118,45 @@ public class Solution127 {
         }
         return num;
     }
+
+    public static int bfs3(String beginWord, String endWord, List<String> wordList){
+        HashMap<String, List<String>> adjacencyMap = new HashMap<>();
+
+        //邻接表，key:每个单词变换第i个字符--> value :可得到的所有单词
+        for (String word : wordList){
+            for (int i = 0; i < word.length(); i++) {
+                String newWord = word.substring(0,i)+"*"+word.substring(i+1);
+                List<String> temp = adjacencyMap.getOrDefault(newWord, new ArrayList<>());
+                temp.add(word);
+                adjacencyMap.put(newWord, temp);
+            }
+        }
+
+        Queue<Pair<String, Integer>> queue = new ArrayDeque<>();
+        queue.add(new Pair<>(beginWord,1));
+        HashMap<String, Boolean> visited = new HashMap<>();
+        visited.put(beginWord, true);
+
+        while (!queue.isEmpty()){
+            Pair<String,Integer> pair = queue.remove();
+            String word = pair.getKey();
+            int len = pair.getValue();
+            for (int i = 0; i < word.length(); i++) {
+                String newWord = word.substring(0,i)+"*"+word.substring(i+1);
+                List<String> neighbors = adjacencyMap.getOrDefault(newWord, new ArrayList<>());
+
+                for (String neighborWord : neighbors) {
+                    if (neighborWord.equals(endWord)){
+                        return len+1;
+                    }
+
+                    if (!visited.containsKey(neighborWord)){
+                        queue.add(new Pair<>(neighborWord,len+1));
+                        visited.put(neighborWord, true);
+                    }
+                }
+            }
+        }
+        return 0;
+    }
 }
