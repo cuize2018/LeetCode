@@ -8,6 +8,11 @@ class Pair{
         this.x = x;
         this.y = y;
     }
+    public Pair(int[] v){
+        this.x = v[0];
+        this.y = v[1];
+    }
+
 
     public int hashCode(){
         return x.hashCode() + y.hashCode();
