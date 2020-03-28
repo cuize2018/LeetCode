@@ -9,7 +9,7 @@ public class Solution820 {
     }
 
     public static int minimumLengthEncoding(String[] words) {
-        Trie trie = new Trie();
+        TrieTree trie = new TrieTree();
         Arrays.sort(words, (s1, s2) -> s2.length() - s1.length());
 
         int len = 0;
@@ -24,10 +24,10 @@ public class Solution820 {
 /**
  * 前缀树
  */
-class Trie {
+class TrieTree {
     private TrieNode root;
 
-    public Trie() {
+    public TrieTree() {
         root = new TrieNode();
     }
 
@@ -51,32 +51,7 @@ class Trie {
         // 如果是新单词的话编码长度增加新单词的长度+1，否则不变。
         return isNew ? word.length() + 1 : 0;
     }
-
 }
 
-/**
- * 前缀树节点
- */
-class TrieNode {
-    private char val;
-    private TrieNode[] children;
-
-    public TrieNode(char val) {
-        this.val = val;
-        children = new TrieNode[26];
-    }
-
-    public TrieNode() {
-        children = new TrieNode[26];
-    }
-
-    public char getVal() {
-        return val;
-    }
-
-    public TrieNode[] getChildren() {
-        return children;
-    }
-}
 
 
