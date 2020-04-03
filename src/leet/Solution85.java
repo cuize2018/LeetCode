@@ -18,10 +18,11 @@ public class Solution85 {
     public static int maximalRectangle(char[][] matrix) {
         int rows = matrix.length;
         if (rows == 0) return 0;
+        int[] heights = new int[matrix[0].length + 2];
 
         int max = 0;
         for (int i = 0; i < rows; i++) {
-            int[] heights = calHeight(matrix, i);
+            calHeight(matrix, i, heights);
             int area = maxArea(heights);
             max = Math.max(area, max);
         }
@@ -64,9 +65,7 @@ public class Solution85 {
      * @param row
      * @return
      */
-    private static int[] calHeight(char[][] matrix, int row) {
-        int[] height = new int[matrix[row].length + 2];
-
+    private static void calHeight(char[][] matrix, int row, int[] height) {
         for (int j = 0; j < matrix[row].length; j++) {
             if (matrix[row][j] == '1') {
                 int i = row - 1;
@@ -78,6 +77,5 @@ public class Solution85 {
                 height[j + 1] = 0;
             }
         }
-        return height;
     }
 }
