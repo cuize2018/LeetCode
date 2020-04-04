@@ -4,8 +4,8 @@ import java.util.Stack;
 
 public class Solution42 {
     public static void main(String[] args){
-        int[] h = {0,1,0,2,1,0,1,3,2,1,2,1};
-        System.out.println(trap2(h));
+        int[] h = {4,2,3};
+        System.out.println(trap3(h));
     }
 
     public static int trap(int[] height) {
@@ -54,5 +54,39 @@ public class Solution42 {
             }
         }
         return sum;
+    }
+
+    /**
+     * 单调栈，入栈逐渐递减的索引，当遇到第一个大于栈顶高度的索引开始计算面积
+     * @param height
+     * @return
+     */
+    public static int trap3(int[] height) {
+        Stack<Integer> stack = new Stack<>();
+        stack.push(0);
+
+        int res = 0;
+        int i = 1;
+        while (i < height.length){
+            if (stack.isEmpty() || height[i] <= height[stack.peek()]){//入栈小于等于栈顶高度的索引
+                stack.push(i);
+                i++;
+            }
+            else {
+                if (!stack.isEmpty()) {
+                    int currHeight = height[stack.pop()];
+                    while (!stack.isEmpty() && height[stack.peek()] == currHeight) {
+                        stack.pop();
+                    }
+                    if (!stack.isEmpty()) {
+                        //高度为左右两边较小的高度-当前高度
+                        int h = Math.min(height[stack.peek()], height[i]) - currHeight;
+                        int width = i - 1 - stack.peek();
+                        res += h * width;
+                    }
+                }
+            }
+        }
+        return res;
     }
 }
