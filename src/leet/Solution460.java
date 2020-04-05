@@ -9,8 +9,8 @@ public class Solution460 {
 }
 
 class LFUCache {
-    Map<Integer, Node> cache;  // 存储缓存的内容
-    Map<Integer, LinkedHashSet<Node>> freqMap; // 存储每个频次对应的双向链表
+    Map<Integer, Data> cache;  // 存储缓存的内容
+    Map<Integer, LinkedHashSet<Data>> freqMap; // 存储每个频次对应的双向链表
     int size;
     int capacity;
     int min; // 存储当前最小频次
@@ -22,79 +22,79 @@ class LFUCache {
     }
 
     public int get(int key) {
-        Node node = cache.get(key);
-        if (node == null) {
+        Data data = cache.get(key);
+        if (data == null) {
             return -1;
         }
-        freqInc(node);
-        return node.value;
+        freqInc(data);
+        return data.value;
     }
 
     public void put(int key, int value) {
         if (capacity == 0) {
             return;
         }
-        Node node = cache.get(key);
-        if (node != null) {
-            node.value = value;
-            freqInc(node);
+        Data data = cache.get(key);
+        if (data != null) {
+            data.value = value;
+            freqInc(data);
         } else {
             if (size == capacity) {
-                Node deadNode = removeNode();
-                cache.remove(deadNode.key);
+                Data deadData = removeNode();
+                cache.remove(deadData.key);
                 size--;
             }
-            Node newNode = new Node(key, value);
-            cache.put(key, newNode);
-            addNode(newNode);
+            Data newData = new Data(key, value);
+            cache.put(key, newData);
+            addNode(newData);
             size++;
         }
     }
 
-    void freqInc(Node node) {
+    void freqInc(Data data) {
         // 从原freq对应的链表里移除, 并更新min
-        int freq = node.freq;
-        LinkedHashSet<Node> set = freqMap.get(freq);
-        set.remove(node);
+        int freq = data.freq;
+        LinkedHashSet<Data> set = freqMap.get(freq);
+        set.remove(data);
         if (freq == min && set.size() == 0) {
             min = freq + 1;
         }
         // 加入新freq对应的链表
-        node.freq++;
-        LinkedHashSet<Node> newSet = freqMap.get(freq + 1);
+        data.freq++;
+        LinkedHashSet<Data> newSet = freqMap.get(freq + 1);
         if (newSet == null) {
             newSet = new LinkedHashSet<>();
             freqMap.put(freq + 1, newSet);
         }
-        newSet.add(node);
+        newSet.add(data);
     }
 
-    void addNode(Node node) {
-        LinkedHashSet<Node> set = freqMap.get(1);
+    void addNode(Data data) {
+        LinkedHashSet<Data> set = freqMap.get(1);
         if (set == null) {
             set = new LinkedHashSet<>();
             freqMap.put(1, set);
         }
-        set.add(node);
+        set.add(data);
         min = 1;
     }
 
-    Node removeNode() {
-        LinkedHashSet<Node> set = freqMap.get(min);
-        Node deadNode = set.iterator().next();
-        set.remove(deadNode);
-        return deadNode;
+    Data removeNode() {
+        LinkedHashSet<Data> set = freqMap.get(min);
+        Data deadData = set.iterator().next();
+        set.remove(deadData);
+        return deadData;
     }
 }
 
-class Node {
+class Data {
     int key;
     int value;
     int freq = 1;
 
-    public Node() {}
+    public Data() {}
 
-    public Node(int key, int value) {
+    public Data(int key, int value) {
         this.key = key;
         this.value = value;
     }
