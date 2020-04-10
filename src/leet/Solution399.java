@@ -15,10 +15,20 @@ public class Solution399 {
         System.out.println(Arrays.toString(calcEquation(equations,values,queries)));
     }
 
-
+    /**
+     * BFS方法
+     * 构造一个双向图，比如a/b=2.0，那么a->b权重2.0，b->a权重0.5，要查的时候就用BFS遍历，每到一个新节点，就乘以权重，找到目标节点时返回当前值即可。
+     * 首先，我们分析一下要怎么判断。没有出现过的字母直接返回-1.0，然后一样的字母直接返回1.0。这时就可以计算两点距离了。
+     *
+     * @param equations
+     * @param values
+     * @param queries
+     * @return
+     */
     public static double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
         double[] out = new double[queries.size()];
         Map<String, ArrayList<Pair2>> map = new HashMap<>();
+        //构造双向邻接表
         for (int i = 0; i < equations.size(); i++) {
             List<String> equation = equations.get(i);
             double weight = values[i];
@@ -44,20 +54,22 @@ public class Solution399 {
     }
 
     private static double getDist(Map<String, ArrayList<Pair2>> map, String a, String b) {
+        //没出现过直接返回-1.0
         if (!map.containsKey(a) || !map.containsKey(b)){
             return -1.0;
         }
+        //相等返回1
         if (a.equals(b))return 1.0;
 
+        //BFS遍历
         Queue<Pair2> queue = new ArrayDeque<>();
-        Map<String, Integer> visited = new HashMap<>();
+        Set<String> visited = new HashSet<>();
         queue.add(new Pair2(a, 1));
-        visited.put(a,1);
+        visited.add(a);
 
         double res = -1.0;
         while (!queue.isEmpty()){
             Pair2 node = queue.remove();
-            //visited.put(node.getX(), 1);
 
             if (node.getX().equals(b)){
                 res = node.getY();
@@ -65,8 +77,9 @@ public class Solution399 {
             }
 
             for (Pair2 neighbor : map.get(node.getX())) {
-                if (!visited.containsKey(neighbor.getX())){
-                    visited.put(neighbor.getX(), 1);
+                if (!visited.contains(neighbor.getX())){
+                    visited.add(neighbor.getX());
+                    //新节点的值乘上权重
                     queue.add(new Pair2(neighbor.getX(), node.getY()*neighbor.getY()));
                 }
             }
