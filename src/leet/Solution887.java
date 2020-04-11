@@ -15,7 +15,7 @@ public class Solution887 {
     public int superEggDrop(int K, int N) {
         return dp2(K, N);
     }
-
+    //超时
     public int dp(int K, int N) {
         if (K == 1) return N;
         if (N == 0) return 0;
@@ -69,7 +69,7 @@ public class Solution887 {
     public int superEggDrop2(int K, int N) {
         return dp4(K, N);
     }
-
+    //超时
     private int dp3(int k, int n) {
         if (k == 1) return n;
         if (n == 0) return 0;
@@ -111,6 +111,10 @@ public class Solution887 {
         map.put(key, res);
         return res;
     }
+
+
+
+
 
     private int dp5(int k, int n) {
         int[][] dp = new int[k+1][n+1];
