@@ -23,18 +23,18 @@ public class Solution297 {
         mov.right = new TreeNode(4);
 
 
-        Codec codec = new Codec();
-        String serialize = codec.serialize(root);
+        CodecBinaryTree codecBinaryTree = new CodecBinaryTree();
+        String serialize = codecBinaryTree.serialize(root);
         System.out.println(serialize);
-        TreeNode deserialize = codec.deserialize(serialize);
+        TreeNode deserialize = codecBinaryTree.deserialize(serialize);
 
-        String serialize1 = codec.serialize(deserialize);
+        String serialize1 = codecBinaryTree.serialize(deserialize);
         System.out.println(serialize1);
         int a = 0;
     }
 }
 
-class Codec {
+class CodecBinaryTree {
     // Encodes a tree to a single string.
     // 层序遍历
     public String serialize(TreeNode root) {
