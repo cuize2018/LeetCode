@@ -24,7 +24,7 @@ public class Solution56 {
         int[][] d = {{2, 3}, {5, 5}, {2, 2}, {3, 4}, {3, 4}};
         int[][] e = {{0, 2}, {2, 3}, {4, 4}, {0, 1}, {5, 7}, {4, 5}, {0, 0}};
         int[][] f = {{0, 0}, {1, 2}, {5, 5}, {2, 4}, {3, 3}, {5, 6}, {5, 6}, {4, 6}, {0, 0}, {1, 2}, {0, 2}, {4, 5}};
-        int[][] out = merge2(a);
+        int[][] out = merge(a);
 
         for (int i = 0; i < out.length; i++) {
             System.out.println(Arrays.toString(out[i]));
@@ -32,57 +32,6 @@ public class Solution56 {
     }
 
     public static int[][] merge(int[][] intervals) {
-        List<List<Integer>> stack = new ArrayList<>();
-        Arrays.sort(intervals, new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                // TODO Auto-generated method stub
-                return o1[0] - o2[0];
-            }
-        });
-
-        for (int i = 0; i < intervals.length; i++) {
-            int[] a = intervals[i];
-            List<Integer> t = new ArrayList<>();
-            for (int n : a) {
-                t.add(n);
-            }
-            stack.add(t);
-        }
-
-        int i = 0;
-        while (stack.size() > 1 && i < stack.size() - 1) {
-            List<Integer> a = stack.get(i);
-            List<Integer> b = stack.get(i + 1);
-            if (IfInCommon(a, b)) {
-                List<Integer> tmp = new ArrayList<>();
-                tmp.add(Math.min(a.get(0), b.get(0)));
-                tmp.add(Math.max(a.get(1), b.get(1)));
-
-                stack.set(i, tmp);
-                stack.remove(i + 1);
-            } else {
-                i++;
-            }
-        }
-        int[][] out = new int[stack.size()][2];
-        int k = 0;
-        for (List<Integer> l : stack) {
-            out[k][0] = l.get(0);
-            out[k][1] = l.get(1);
-            k++;
-        }
-        return out;
-    }
-
-    public static boolean IfInCommon(List<Integer> a, List<Integer> b) {
-        if ((a.get(0) <= b.get(1) && a.get(1) >= b.get(0))) {
-            return true;
-        } else return false;
-    }
-
-
-    public static int[][] merge2(int[][] intervals) {
         if (intervals.length == 0) return intervals;
         Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
         List<int[]> out = new ArrayList<>();
