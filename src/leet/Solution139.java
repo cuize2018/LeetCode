@@ -11,7 +11,7 @@ public class Solution139 {
         List<String> wordDict = new ArrayList<>();
         wordDict.add("apple");wordDict.add("pen");
 
-        System.out.println(wordBreak(s,wordDict));
+        System.out.println(wordBreak2(s,wordDict));
     }
 
     /**
@@ -26,9 +26,7 @@ public class Solution139 {
      */
     public static boolean wordBreak(String s, List<String> wordDict) {
         Set<String> wordSet = new HashSet<>();
-        for (String word: wordDict){
-            wordSet.add(word);
-        }
+        wordSet.addAll(wordDict);
 
         boolean[] dp = new boolean[s.length()+1];
         dp[0] = true;
@@ -41,6 +39,22 @@ public class Solution139 {
         }
         return dp[s.length()];
 
+    }
+
+    public static boolean wordBreak2(String s, List<String> wordDict) {
+        Set<String> words = new HashSet<>(wordDict);
+        boolean[] dp = new boolean[s.length()+1];
+
+        dp[0] = true;
+        for (int i = 1; i < dp.length; i++) {
+            for (int j = i-1; j >=0 ; j--) {
+                if (dp[j] && words.contains(s.substring(j, i))){
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[s.length()];
     }
 
 }
