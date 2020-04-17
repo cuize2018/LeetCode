@@ -19,54 +19,6 @@ public class Solution212 {
         System.out.println(solution212.findWords(board, words));
     }
 
-    public List<String> findWords(char[][] board, String[] words) {
-        List<String> out = new ArrayList<>();
-        for (String word : words) {
-            if (exist(board, word)) {
-                out.add(word);
-            }
-        }
-        return out;
-    }
-
-    public boolean exist(char[][] board, String word) {
-        int rows = board.length;
-        if (rows == 0) return false;
-        int cols = board[0].length;
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (board[i][j] == word.charAt(0)) {
-                    board[i][j] = '#';
-                    boolean flag = dfs(board, word.substring(1), i, j, -2, -2);
-                    board[i][j] = word.charAt(0);
-                    if (flag) return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean dfs(char[][] board, String word, int i, int j, int lastX, int lastY) {
-        if (word.length() == 0) {
-            return true;
-        }
-
-        for (int[] dir : dirs) {
-            int x = i + dir[0];
-            int y = j + dir[1];
-
-            if (x >= 0 && y >= 0 && x < board.length && y < board[0].length && board[x][y] == word.charAt(0) &&
-                    (lastX != x || lastY != y)) {
-                board[x][y] = '#';
-                boolean flag = dfs(board, word.substring(1), x, y, i, j);
-                board[x][y] = word.charAt(0);
-                if (flag) return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * 解法一中的想法是，从 words 中依次选定一个单词 -> 从图中的每个位置出发，看能否找到这个单词
      *
@@ -90,7 +42,7 @@ public class Solution212 {
      * @param words
      * @return
      */
-    public List<String> findWords2(char[][] board, String[] words) {
+    public List<String> findWords(char[][] board, String[] words) {
         TrieWithWord trieWithWord = new TrieWithWord();
         for (String word : words) {
             trieWithWord.insert(word);
