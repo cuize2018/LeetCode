@@ -1,6 +1,9 @@
 package leet;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class Solution912 {
     public static void main(String[] args) {
@@ -13,6 +16,28 @@ public class Solution912 {
         if (nums.length <= 1) return nums;
         quickSort(nums, 0, nums.length - 1);
         return nums;
+
+//        LinkedList<Integer> out = new LinkedList<>();
+//        for (int num : nums) {
+//            insertSort(out, num);
+//        }
+//        return out.stream().mapToInt(a ->a.intValue()).toArray();
+    }
+
+
+    private static void insertSort(LinkedList<Integer> out, int num) {
+        if (out.isEmpty() || out.getLast() <= num){
+            out.add(num);
+            return;
+        }
+
+        for (ListIterator<Integer> iterator = out.listIterator(); iterator.hasNext();){
+            if (num < iterator.next()){
+                iterator.previous();
+                iterator.add(num);
+                break;
+            }
+        }
     }
 
     /**
