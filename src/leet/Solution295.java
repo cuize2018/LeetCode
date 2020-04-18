@@ -5,7 +5,7 @@ import java.util.*;
 public class Solution295 {
 
     public static void main(String[] args) {
-        MedianFinder2 medianFinder = new MedianFinder2();
+        MedianFinder3 medianFinder = new MedianFinder3();
         medianFinder.addNum(6);
         medianFinder.addNum(10);
         medianFinder.addNum(2);
@@ -59,10 +59,10 @@ class MedianFinder {
 
 
 class MedianFinder2 {
-    LinkedList<Integer> nums;
+    ArrayList<Integer> nums;
     /** initialize your data structure here. */
     public MedianFinder2() {
-        nums = new LinkedList<>();
+        nums = new ArrayList<>();
     }
 
     public void addNum(int num) {
@@ -73,6 +73,42 @@ class MedianFinder2 {
             for (int i = 0; i < nums.size(); i++) {
                 if (num < nums.get(i)){
                     nums.add(i, num);
+                    break;
+                }
+            }
+        }
+    }
+
+    public double findMedian() {
+        int middle;
+        if (nums.size() % 2 == 0){
+            int a = nums.size() >>>1;
+            int b = a - 1;
+            return (nums.get(a)+nums.get(b))/2D;
+        }
+        else {
+            middle = nums.size() >>> 1;
+            return (double)nums.get(middle);
+        }
+    }
+}
+
+class MedianFinder3 {
+    LinkedList<Integer> nums;
+    /** initialize your data structure here. */
+    public MedianFinder3() {
+        nums = new LinkedList<>();
+    }
+
+    public void addNum(int num) {
+        if (nums.isEmpty() || num >= nums.get(nums.size()-1)) {
+            nums.add(num);
+        }
+        else {
+            for (ListIterator<Integer> iterator = nums.listIterator();iterator.hasNext();){
+                if (num < iterator.next()){
+                    iterator.previous();
+                    iterator.add(num);
                     break;
                 }
             }
