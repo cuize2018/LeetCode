@@ -1,6 +1,7 @@
 package leet;
 
 import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.Queue;
 
 public class Solution200 {
@@ -10,6 +11,7 @@ public class Solution200 {
 
     /**
      * BFS
+     *
      * @param grid
      * @return
      */
@@ -18,40 +20,30 @@ public class Solution200 {
         if (rows == 0) return 0;
         int cols = grid[0].length;
 
+        int[][] dirs = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
         int count = 0;
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (grid[i][j] == '1') {
-                    count++;
-                    Queue<Pair> queue = new ArrayDeque<>();
-                    grid[i][j] = '0';//标记为'0'表示访问过了
-                    queue.add(new Pair(i, j));
-
+                    Queue<Integer> queue = new LinkedList<>();
+                    queue.add(i * 500 + j);
+                    grid[i][j] = '0';
                     while (!queue.isEmpty()) {
-                        Pair point = queue.remove();
-                        int x = point.getX();
-                        int y = point.getY();
+                        Integer info = queue.remove();
+                        int x = info / 500;
+                        int y = info % 500;
 
-                        if (x > 0 && grid[x - 1][y] == '1') {
-                            queue.add(new Pair(x - 1, y));
-                            grid[x - 1][y] = '0';
-                        }
+                        for (int[] dir : dirs) {
+                            int xPrime = x + dir[0];
+                            int yPrime = y + dir[1];
 
-                        if (x < rows - 1 && grid[x + 1][y] == '1') {
-                            queue.add(new Pair(x + 1, y));
-                            grid[x + 1][y] = '0';
-                        }
-
-                        if (y > 0 && grid[x][y - 1] == '1') {
-                            queue.add(new Pair(x, y - 1));
-                            grid[x][y - 1] = '0';
-                        }
-
-                        if (y < cols - 1 && grid[x][y + 1] == '1') {
-                            queue.add(new Pair(x, y + 1));
-                            grid[x][y + 1] = '0';
+                            if (xPrime >= 0 && yPrime >= 0 && xPrime < rows && yPrime < cols && grid[xPrime][yPrime] == '1') {
+                                queue.add(xPrime * 500 + yPrime);
+                                grid[xPrime][yPrime] = '0';
+                            }
                         }
                     }
+                    count++;
                 }
             }
         }
