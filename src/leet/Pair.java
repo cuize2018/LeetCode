@@ -1,6 +1,6 @@
 package leet;
 
-class Pair{
+public class Pair{
     private Integer x;
     private Integer y;
 
