@@ -1,17 +1,13 @@
 package leet;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Solution199 {
-    List<Integer> out = new ArrayList<>();
-    Map<Integer, Integer> map = new HashMap<>();
-    int high = 0;
-    public static void main(String[] args){
-        TreeNode root = new TreeNode(1);TreeNode mov = root;
-        root.left = new TreeNode(2);root.right = new TreeNode(3);
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        TreeNode mov = root;
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
         mov = root.left;
         mov.right = new TreeNode(5);
         mov = root.right;
@@ -24,37 +20,75 @@ public class Solution199 {
         System.out.println(s.rightSideView(root));
     }
 
-    public  List<Integer> rightSideView(TreeNode root) {
-        if (root == null)return out;
-        backTrack(root, high);
-        for (int i = 0;i<=high;i++){
-            out.add(map.get(i));
-        }
-        return out;
+    //层序遍历取最右
+    public List<Integer> rightSideView(TreeNode root) {
+        if (root == null) return new ArrayList<>();
+        LinkedList<TreeNode> thisLevel = new LinkedList<>();
+        thisLevel.add(root);
+
+        return levelOrder(thisLevel);
     }
 
-    public void backTrack(TreeNode root, int level){
-        if (root.left == null && root.right == null){
-            if (!map.containsKey(level)) map.put(level, root.val);
-            return;
-        }
+    private List<Integer> levelOrder(LinkedList<TreeNode> thisLevel) {
+        List<Integer> res = new ArrayList<>();
+        if (thisLevel == null || thisLevel.isEmpty()) return res;
 
-        if (level >= high) {
-            if (!map.containsKey(level)) map.put(level, root.val);
-        }
+        TreeNode mostRight = thisLevel.getLast();
+        res.add(mostRight.val);
 
-        if (root.right != null){
-            if (high <= level)high++;
-            level++;
-            backTrack(root.right, level);
-            level--;
+        LinkedList<TreeNode> nextLevel = new LinkedList<>();
+        for (TreeNode treeNode : thisLevel) {
+            if (treeNode.left != null) {
+                nextLevel.add(treeNode.left);
+            }
+            if (treeNode.right != null) {
+                nextLevel.add(treeNode.right);
+            }
         }
-
-        if (root.left != null){
-            if (high <= level)high++;
-            level++;
-            backTrack(root.left, level);
-        }
-
+        List<Integer> rest = levelOrder(nextLevel);
+        res.addAll(rest);
+        return res;
     }
+
+    public List<Integer> rightSideView2(TreeNode root) {
+        if (root == null) return new ArrayList<>();
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        queue.add(root);
+        List<Integer> res = new ArrayList<>();
+
+        while (!queue.isEmpty()){
+            int size = queue.size();
+            while (size > 0){
+                size--;
+                TreeNode node = queue.remove();
+                if (size == 0){
+                    res.add(node.val);
+                }
+                if (node.left != null)queue.add(node.left);
+                if (node.right != null)queue.add(node.right);
+
+            }
+        }
+        return res;
+    }
+
+    public List<Integer> rightSideView3(TreeNode root) {
+        if (root == null) return new ArrayList<>();
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        queue.add(root);
+        List<Integer> res = new ArrayList<>();
+
+        while (!queue.isEmpty()){
+            int size = queue.size();
+            res.add(queue.peek().val);
+            while (size > 0){
+                size--;
+                TreeNode node = queue.remove();
+                if (node.right != null)queue.add(node.right);
+                if (node.left != null)queue.add(node.left);
+            }
+        }
+        return res;
+    }
+
 }
