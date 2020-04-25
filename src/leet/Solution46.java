@@ -1,68 +1,65 @@
 package leet;
 /**
  * 给定一个没有重复数字的序列，返回其所有可能的全排列。
- *
+ * <p>
  * 示例:
- *
+ * <p>
  * 输入: [1,2,3]
  * 输出:
  * [
- *   [1,2,3],
- *   [1,3,2],
- *   [2,1,3],
- *   [2,3,1],
- *   [3,1,2],
- *   [3,2,1]
+ * [1,2,3],
+ * [1,3,2],
+ * [2,1,3],
+ * [2,3,1],
+ * [3,1,2],
+ * [3,2,1]
  * ]
  */
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Solution46 {
-    public static void main(String[] args){
-        int[] nums = {1,2,3,4};
-        System.out.println(permute(nums));
+    List<List<Integer>> res = new ArrayList<>();
+    List<Integer> one = new ArrayList<>();
+
+    public static void main(String[] args) {
+        int[] nums = {1, 2, 3};
+        Solution46 solution46 = new Solution46();
+
+        System.out.println(solution46.permute2(nums));
     }
 
-    public static List<List<Integer>> permute(int[] nums) {
-        List<List<Integer>> out = new ArrayList<>();
-        Stack<Integer> list = new Stack<>();
-        for (int i = 0;i<nums.length;i++){
-            int[] r = new int[nums.length-1];
-            int k = 0;
-            for (int j = 0;j<nums.length;j++){
-                if (j != i){
-                    r[k] = nums[j];
-                    k++;
-                }
-            }
+    public List<List<Integer>> permute2(int[] nums) {
+        if (nums.length == 0) return new ArrayList<>();
+        Set<Integer> alreadyVisited = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            alreadyVisited.add(i);
+            one.add(nums[i]);
 
-            list.push(nums[i]);
-            onePart(r, list, out);
-            list.clear();
+            dfs(nums, alreadyVisited);
+
+            alreadyVisited.remove(i);
+            one.remove(one.size() - 1);
         }
-        return out;
+        return res;
     }
 
-    private static  void onePart(int[] rest, Stack<Integer> list, List<List<Integer>> out){
-        if (rest.length == 0){
-            out.add(new ArrayList<>(list));
+    private void dfs(int[] nums, Set<Integer> alreadyVisited) {
+        if (alreadyVisited.size() == nums.length) {
+            res.add(new ArrayList<>(one));
+            return;
         }
-        for (int i = 0;i<rest.length;i++){
-            int[] r = new int[rest.length-1];
-            int k = 0;
-            for (int j = 0;j<rest.length;j++){
-                if (j != i){
-                    r[k] = rest[j];
-                    k++;
-                }
-            }
 
-            list.push(rest[i]);
-            onePart(r, list, out);
-            list.pop();
+        for (int i = 0; i < nums.length; i++) {
+            if (!alreadyVisited.contains(i)) {
+                one.add(nums[i]);
+                alreadyVisited.add(i);
+
+                dfs(nums, alreadyVisited);
+
+                alreadyVisited.remove(i);
+                one.remove(one.size() - 1);
+            }
         }
     }
 }
