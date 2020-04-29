@@ -61,9 +61,9 @@ public class Solution33 {
                     low = middle + 1;
                 }
             } else {
-                if (nums[middle] < target && target <= nums[high]) {//去前半部分
+                if (nums[middle] < target && target <= nums[high]) {//去后半部分
                     low = middle + 1;
-                } else {//去后半部分
+                } else {//去前半部分
                     high = middle - 1;
                 }
 
