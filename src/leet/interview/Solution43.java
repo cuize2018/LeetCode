@@ -3,6 +3,8 @@ package leet.interview;
 import java.util.Map;
 
 public class Solution43 {
+    int[] mem;
+
     public static void main(String[] args) {
 
     }
@@ -43,7 +45,7 @@ public class Solution43 {
         if (n <= 0) return 0;
 
         String num = String.valueOf(n);
-        int high = Integer.parseInt(String.valueOf(num.charAt(0)));
+        int high =  num.charAt(0) - '0';
         int pow = (int) Math.pow(10, num.length() - 1);
         int last = n - high * pow;
 
@@ -51,6 +53,33 @@ public class Solution43 {
             return high * f(pow - 1) + pow + f(last);
         } else {
             return f(pow - 1) + last + 1 + f(last);
+        }
+    }
+
+
+    public int countDigitOne2(int n) {
+        mem = new int[11];
+        int pow = 1;
+        //mem[i] 代表pow = Math.pow(10, i)的[0,pow-1]的1的个数
+        for (int i = 1; i < mem.length; i++) {
+            mem[i] = 10 * mem[i - 1] + pow;
+            pow *= 10;
+        }
+        return f2(n);
+    }
+
+    private int f2(int n) {
+        if (n <= 0) return 0;
+
+        String num = String.valueOf(n);
+        int high = num.charAt(0) - '0';
+        int pow = (int) Math.pow(10, num.length() - 1);
+        int last = n - high * pow;
+
+        if (high != 1) {
+            return high * mem[num.length() - 1] + pow + f2(last);
+        } else {
+            return mem[num.length() - 1] + last + 1 + f2(last);
         }
     }
 }
