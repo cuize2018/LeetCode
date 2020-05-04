@@ -4,7 +4,7 @@ public class Solution45 {
     public static void main(String[] args) {
         int[] a = {2,3,1,1,4};
         int [] b = {3,2,1};
-        System.out.println(jump2(b));
+        System.out.println(jump3(b));
     }
 
     public static int jump(int[] nums) {
@@ -55,6 +55,32 @@ public class Solution45 {
                     index = i;
                 }
             }
+            count++;
+        }
+        return count;
+    }
+
+
+    public static int jump3(int[] nums) {
+        if (nums.length == 0)return 0;
+        if (nums.length == 1)return 0;
+
+        int i = 0;
+        int count = 0;
+        while (i < nums.length){
+            if (i + nums[i] >= nums.length-1){
+                count++;
+                return count;
+            }
+            int max = 0;
+            int nextIdx = 0;
+            for (int j = i+1; j <= i+nums[i]; j++) {
+                if (j+nums[j] > max){
+                    nextIdx = j;
+                    max = j+nums[j];
+                }
+            }
+            i = nextIdx;
             count++;
         }
         return count;
