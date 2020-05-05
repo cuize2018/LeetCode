@@ -4,7 +4,8 @@ import java.util.*;
 
 public class Solution98 {
     TreeNode pre = null;
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         TreeNode root = new TreeNode(3);
         TreeNode root_c = root;
         root.left = new TreeNode(1);
@@ -22,77 +23,34 @@ public class Solution98 {
 
         Solution98 s = new Solution98();
 
-        System.out.println(s.isValidBST2(root_c));
-    }
-
-
-    public  boolean isValidBST(TreeNode root) {
-        if (root == null)return true;
-        if (root.left == null && root.right == null){
-            return true;
-        }
-
-        List<TreeNode> left = getAllLeft(root);
-        List<TreeNode> right = getAllRight(root);
-
-        for (TreeNode node : left){
-            if (node.val >= root.val){
-                return false;
-            }
-        }
-
-        for (TreeNode node : right){
-            if (node.val <= root.val){
-                return false;
-            }
-        }
-
-        return isValidBST(root.left) && isValidBST(root.right);
-    }
-
-    private List<TreeNode> getAllLeft(TreeNode root){
-        List<TreeNode> out = new ArrayList<>();
-        if (root == null)return out;
-        if (root.left == null && root.right == null){
-            return out;
-        }
-
-        if (root.left != null){
-            out.add(root.left);
-        }
-
-        out.addAll(getAllLeft(root.left));
-        out.addAll(getAllRight(root.left));
-        return out;
-    }
-
-    private List<TreeNode> getAllRight(TreeNode root){
-        List<TreeNode> out = new ArrayList<>();
-        if (root == null)return out;
-        if (root.left == null && root.right == null){
-            return out;
-        }
-
-        if (root.right != null){
-            out.add(root.right);
-        }
-
-        out.addAll(getAllLeft(root.right));
-        out.addAll(getAllRight(root.right));
-        return out;
+        System.out.println(s.isValidBST(root_c));
     }
 
     /**
      * 因为二叉搜索树中序遍历是递增的,所以我们可以中序遍历判断前一数是否小于后一个数.
+     *
      * @param root
      * @return
      */
-    public  boolean isValidBST2(TreeNode root) {
+    public boolean isValidBST(TreeNode root) {
         if (root == null) return true;
 
-        if (!isValidBST2(root.left))return false;
-        if (pre != null && pre.val >= root.val)return false;
+        if (!isValidBST(root.left)) return false;
+        if (pre != null && pre.val >= root.val) return false;
         pre = root;
-        return isValidBST2(root.right);
+        return isValidBST(root.right);
     }
+
+    public boolean isValidBST3(TreeNode root) {
+        if (root == null) return true;
+
+        boolean left = isValidBST3(root.left);
+        if (!left) return false;
+
+        if (pre != null && root.val <= pre.val) return false;
+        pre = root;
+
+        return isValidBST3(root.right);
+    }
+
 }
