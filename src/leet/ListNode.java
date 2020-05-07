@@ -1,8 +1,8 @@
 package leet;
 
 public class ListNode {
-    int val;
-    leet.ListNode next;
+    public int val;
+    public leet.ListNode next;
     ListNode(int x) { val = x; }
 
     public void PrintListNode(){
