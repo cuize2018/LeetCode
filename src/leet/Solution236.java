@@ -38,4 +38,28 @@ public class Solution236 {
         return left || middle || right;
     }
 
+    /**
+     * 两个节点p,q分为两种情况：
+     * p和q在相同子树中
+     * p和q在不同子树中
+     * @param root
+     * @param p
+     * @param q
+     * @return
+     */
+    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+        //如果当前节点为空或等于p或q，则返回当前节点
+        if (root == null || root.val == p.val || root.val == q.val) return root;
+
+        //递归遍历左右子树，如果左右子树查到节点都不为空，则表明p和q分别在左右子树中，因此，当前节点即为最近公共祖先；
+        TreeNode left = lowestCommonAncestor2(root.left, p, q);
+        TreeNode right = lowestCommonAncestor2(root.right, p, q);
+        if (left != null && right != null) return root;
+
+        //如果左右子树其中一个不为空，则返回非空节点。
+        if (left == null) return right;
+        return left;
+    }
+
+
 }
