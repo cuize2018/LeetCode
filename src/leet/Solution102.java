@@ -1,7 +1,10 @@
 package leet;
 
+import java.net.Inet4Address;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class Solution102 {
     private List<List<Integer>> out = new ArrayList<>();
@@ -21,47 +24,26 @@ public class Solution102 {
     }
 
     public List<List<Integer>> levelOrder(TreeNode root) {
-        if (root == null)return out;
-        if (root.left == null && root.right == null){
-            List<Integer> l = new ArrayList<>();
-            l.add(root.val);
-            out.add(l);
-            return out;
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null)return res;
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()){
+            int size = queue.size();
+            List<Integer> oneLevel = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.remove();
+
+                oneLevel.add(node.val);
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null)queue.add(node.right);
+            }
+            res.add(oneLevel);
         }
-
-        List<TreeNode> lastLevel = new ArrayList<>();
-        List<Integer> val = new ArrayList<>();
-        lastLevel.add(root);
-        val.add(root.val);
-        out.add(val);
-
-        getLevel(lastLevel);
-        return out;
+        return res;
     }
 
-    private void getLevel(List<TreeNode> lastLevel){
-        List<TreeNode> thisLevel = new ArrayList<>();
-        List<Integer> val = new ArrayList<>();
-
-        for (TreeNode node:lastLevel){
-            TreeNode leftNode = node.left;
-            TreeNode rightNode = node.right;
-
-            if (leftNode != null){
-                thisLevel.add(leftNode);
-                val.add(leftNode.val);
-            }
-            if (rightNode != null){
-                thisLevel.add(rightNode);
-                val.add(rightNode.val);
-            }
-        }
-        if (thisLevel.isEmpty()){
-            return;
-        }
-        out.add(val);
-        getLevel(thisLevel);
-
-    }
 
 }
