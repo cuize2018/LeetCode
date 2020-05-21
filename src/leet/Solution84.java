@@ -94,5 +94,28 @@ public class Solution84 {
 
     }
 
+    public static int largestRectangleArea4(int[] heights) {
+        int[] h = new int[heights.length + 2];
+        System.arraycopy(heights, 0, h, 1, heights.length);
+
+        Stack<Integer> stack = new Stack<>();
+        stack.push(0);
+        int i = 1;
+        int max = 0;
+        while (i < h.length) {
+            if (h[i] >= h[stack.peek()]) {
+                stack.push(i);
+                i++;
+            } else {
+                int height = h[stack.pop()];
+                while (!stack.isEmpty() && h[stack.peek()] == height) {
+                    stack.pop();
+                }
+                max = Math.max(max, height * (i - stack.peek() - 1));
+            }
+        }
+        return max;
+    }
+
 
 }
