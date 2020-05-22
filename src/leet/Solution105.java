@@ -1,5 +1,7 @@
 package leet;
 
+import sun.dc.pr.PRError;
+
 import java.util.Arrays;
 
 public class Solution105 {
@@ -39,5 +41,28 @@ public class Solution105 {
             }
         }
         return rootNode;
+    }
+
+    public static TreeNode buildTree2(int[] preorder, int[] inorder) {
+        if (preorder.length == 0)return null;
+
+        TreeNode root = new TreeNode(preorder[0]);
+        int rootIdx = 0;
+        for (int i = 0; i < inorder.length; i++) {
+            if (inorder[i] == root.val){
+                rootIdx = i;break;
+            }
+        }
+        int leftNums = rootIdx;
+
+        int[] intLeftSubTree = Arrays.copyOfRange(inorder, 0, rootIdx);
+        int[] inRightSubTree = Arrays.copyOfRange(inorder, rootIdx+1, inorder.length);
+
+        int[] preLeftSubTree = Arrays.copyOfRange(preorder, 1, 1+leftNums);
+        int[] preRightSubTree = Arrays.copyOfRange(preorder, 1+leftNums, preorder.length);
+
+        root.left = buildTree2(preLeftSubTree, intLeftSubTree);
+        root.right = buildTree2(preRightSubTree, inRightSubTree);
+        return root;
     }
 }
