@@ -15,6 +15,7 @@ public class Solution76 {
      * 2、我们先不断地增加 right 指针扩大窗口 [left, right]，直到窗口中的字符串符合要求（包含了 T 中的所有字符）。
      * 3、此时，我们停止增加 right，转而不断增加 left 指针缩小窗口 [left, right]，直到窗口中的字符串不再符合要求（不包含 T 中的所有字符了）。同时，每次增加 left，我们都要更新一轮结果。
      * 4、重复第 2 和第 3 步，直到 right 到达字符串 S 的尽头。
+     *
      * @param s
      * @param t
      * @return
@@ -94,7 +95,7 @@ public class Solution76 {
         boolean isOk = false;
 
         while (right < s_len) {
-            origin.put(s.charAt(right), origin.getOrDefault(s.charAt(right),0)+1);
+            origin.put(s.charAt(right), origin.getOrDefault(s.charAt(right), 0) + 1);
 
             if (origin.keySet().containsAll(target.keySet())) {
                 isOk = true;
@@ -135,5 +136,45 @@ public class Solution76 {
             return "";
         }
         return s.substring(start, start + min);
+    }
+
+    public static String minWindow3(String s, String t) {
+        Map<Character, Integer> map = new HashMap<>();
+        Map<Character, Integer> target = new HashMap<>();
+        for (char c : t.toCharArray()) {
+            target.put(c, target.getOrDefault(c, 0) + 1);
+        }
+
+        char[] chars = s.toCharArray();
+        int left = 0;
+        int right = 0;
+        int match = 0;
+        int min = Integer.MAX_VALUE;
+        int start = 0;
+        while (right < s.length()) {
+            if (target.containsKey(chars[right])) {
+                map.put(chars[right], map.getOrDefault(chars[right], 0) + 1);
+                if (map.get(chars[right]).equals(target.get(chars[right]))) {
+                    match++;
+                }
+            }
+            right++;
+
+            while (match == target.keySet().size()) {
+                if (right - left < min) {
+                    min = right - left;
+                    start = left;
+                }
+
+                if (target.containsKey(chars[left])) {
+                    map.put(chars[left], map.get(chars[left]) - 1);
+                    if (map.get(chars[left]) < target.get(chars[left])) {
+                        match--;
+                    }
+                }
+                left++;
+            }
+        }
+        return min == Integer.MAX_VALUE ? "" : s.substring(start, start + min);
     }
 }
