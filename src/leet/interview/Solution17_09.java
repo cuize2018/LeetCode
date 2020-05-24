@@ -1,9 +1,11 @@
-package leet;
+package leet.interview;
 
-public class Solution264 {
-    public static void main(String[] args){
-
+public class Solution17_09 {
+    public static void main(String[] args) {
+        int k = 8;
+        System.out.println(getKthMagicNumber(k));
     }
+
     /**
      * 实际上pi的含义是有资格同i相乘的最小丑数的位置。
      * 这里资格指的是：如果一个丑数nums[pi]通过乘以i可以得到下一个丑数，那么这个丑数nums[pi]就永远失去了同i相乘的资格（没有必要再乘了），
@@ -18,23 +20,26 @@ public class Solution264 {
      * 依此类推，每次我们都分别比较有资格同2，3，5相乘的最小丑数，选择最小的那个作为下一个丑数，
      * 假设选择到的这个丑数是同i（i=2，3，5）相乘得到的，所以它失去了同i相乘的资格，把对应的pi++，让pi指向下一个丑数即可。
      *
-     * @param n
+     * @param k
      * @return
      */
-    public static int nthUglyNumber(int n) {
-        int[] dp = new int[n];
+    public static int getKthMagicNumber(int k) {
+        if (k == 1) return 1;
+        int[] dp = new int[k];
         dp[0] = 1;
-
-        int idx_2 = 0;
-        int idx_3 = 0;
-        int idx_5 = 0;
-        for (int i = 1;i<n;i++){
-            dp[i] = Math.min(Math.min(2*dp[idx_2], 3*dp[idx_3]), 5*dp[idx_5]);
-            if (dp[i] == 2*dp[idx_2])idx_2++;
-            if (dp[i] == 3*dp[idx_3])idx_3++;
-            if (dp[i] == 5*dp[idx_5])idx_5++;
+        int p3 = 0;
+        int p5 = 0;
+        int p7 = 0;
+        for (int j = 1; j < k; j++) {
+            int a = dp[p3] * 3;
+            int b = dp[p5] * 5;
+            int c = dp[p7] * 7;
+            int next = Math.min(a, Math.min(b, c));
+            if (next == a) p3++;
+            if (next == b) p5++;
+            if (next == c) p7++;
+            dp[j] = next;
         }
-
-        return dp[n-1];
+        return dp[k - 1];
     }
 }
