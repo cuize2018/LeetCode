@@ -17,7 +17,7 @@ package leet;
 public class Solution5 {
     public static void main(String[] args) {
         String s = "aaaa";
-        String out = longestPalindrome3(s);
+        String out = longestPalindrome2(s);
         System.out.println(out);
     }
 
@@ -54,25 +54,23 @@ public class Solution5 {
         return r - l - 1;
     }
 
-    public static String longestPalindrome3(String s) {
-        if (s.length() == 0) return "";
-        boolean[][] dp = new boolean[s.length()][s.length()];
-        int maxEnd = 0;
-        int maxLen = 0;
-        int maxStart = 0;
-        for (int r = 1; r < s.length(); r++) {
-            for (int l = 0; l < r; l++) {
-                if (s.charAt(l) == s.charAt(r) && (r - l <= 2 || dp[l + 1][r - 1])) {
-                    dp[l][r] = true;
-                    if (r - l + 1 > maxLen) {
-                        maxLen = r - l + 1;
-                        maxEnd = r;
-                        maxStart = l;
-                    }
-                }
-            }
+    public static String longestPalindrome2(String s) {
+        String res = "";
+        for (int i = 0; i < s.length(); i++) {
+            String a = expand(s, i, i);//奇数
+            String b = expand(s, i, i + 1);//偶数
+            String temp = a.length() > b.length() ? a : b;
+            if (temp.length() > res.length()) res = temp;
         }
-        return s.substring(maxStart, maxEnd + 1);
+        return res;
+    }
+
+    private static String expand(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        return s.substring(left + 1, right);
     }
 }
 
