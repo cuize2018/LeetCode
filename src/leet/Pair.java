@@ -25,6 +25,14 @@ public class Pair{
         return false;
     }
 
+    public void setX(Integer x) {
+        this.x = x;
+    }
+
+    public void setY(Integer y) {
+        this.y = y;
+    }
+
     public Integer getX() {
         return x;
     }
