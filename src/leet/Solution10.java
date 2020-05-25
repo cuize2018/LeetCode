@@ -57,4 +57,36 @@ public class Solution10 {
         return dp[s.length()][p.length()];
     }
 
+    public static boolean isMatch3(String s, String p) {
+        int len1 = s.length();
+        int len2 = p.length();
+
+        boolean[][] dp = new boolean[len1 + 1][len2 + 1];
+        dp[0][0] = true;
+        for (int j = 0; j < len2; j++) {
+            if (p.charAt(j) == '*' && dp[0][j - 1]) {
+                dp[0][j + 1] = true;
+            }
+        }
+
+        for (int i = 0; i < len1; i++) {
+            for (int j = 0; j < len2; j++) {
+                if (p.charAt(j) == '.' || s.charAt(i) == p.charAt(j)) {
+                    dp[i + 1][j + 1] = dp[i][j];
+                }
+                else if (p.charAt(j) == '*') {
+                    if (p.charAt(j - 1) != s.charAt(i) && p.charAt(j - 1) != '.') {
+                        dp[i + 1][j + 1] = dp[i + 1][j - 1];
+                    } else {
+                        dp[i + 1][j + 1] =
+                                dp[i + 1][j - 1]    // 0个匹配
+                                || dp[i + 1][j]     // 1个匹配
+                                || dp[i][j + 1];    // 多个匹配
+                    }
+                }
+            }
+        }
+        return dp[len1][len2];
+    }
+
 }
