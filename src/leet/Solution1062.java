@@ -25,7 +25,7 @@ public class Solution1062 {
 
         while (left != right) {
             int middle = (left + right) >>> 1;
-            int idx = search(s, middle, a, mod, nums);
+            int idx = RabinKarpSearch(s, middle, a, mod, nums);
             if (idx != -1) {//有重复
                 left = middle + 1;
             } else {//无重复
@@ -35,22 +35,22 @@ public class Solution1062 {
         return left - 1;
     }
 
-    private static int search(String s, int len, int a, int mod, int[] nums) {
+    private static int RabinKarpSearch(String s, int len, int base, int mod, int[] nums) {
         long hash = 0;
         Set<Long> seen = new HashSet<>();
 
         long al = 1;
         for (int i = 1; i <= len; i++) {
-            al = (al * a) % mod;
+            al = (al * base) % mod;
         }
 
         for (int i = 0; i < len; i++) {
-            hash += (nums[i] * Math.pow(a, len - i - 1))%mod;
+            hash += (nums[i] * Math.pow(base, len - i - 1))%mod;
         }
         seen.add(hash);
 
         for (int i = 1; i <= s.length() - len; i++) {
-            hash = (hash * a - nums[i - 1] * al % mod + mod)%mod;
+            hash = (hash * base - nums[i - 1] * al % mod + mod)%mod;
             hash += nums[i + len - 1] % mod;
             if (seen.contains(hash)) {
                 return i;
