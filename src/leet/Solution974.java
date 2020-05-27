@@ -68,4 +68,19 @@ public class Solution974 {
         }
         return count;
     }
+
+    public static int subarraysDivByK3(int[] A, int K) {
+        int[] map = new int[K];
+        int count = 0;
+        int sum = 0;
+
+        map[0] = 1;
+        for (int value : A) {
+            sum += value;
+            int sumModValue = (sum % K + K) % K; // 注意 Java 取模的特殊性，当被除数为负数时取模结果为负数，需要纠正
+            count += map[sumModValue];
+            map[sumModValue]++;
+        }
+        return count;
+    }
 }
