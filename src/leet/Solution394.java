@@ -4,43 +4,41 @@ import java.util.Stack;
 
 public class Solution394 {
     public static void main(String[] args) {
-        String a = "3[a]2[bc]";
+        String a = "2[abc]3[cd]ef";
         System.out.println(decodeString(a));
     }
 
     public static String decodeString(String s) {
+        StringBuilder str = new StringBuilder();
+        char[] chars = s.toCharArray();
         Stack<Character> stack = new Stack<>();
-        for (char c : s.toCharArray()){
-            if (c == ']'){
-                StringBuilder tmp = new StringBuilder();
-                while (!stack.isEmpty() && stack.peek() != '['){
-                    tmp.append(stack.pop());
+        int i = 0;
+        while (i < chars.length) {
+            if (chars[i] == ']') {
+                StringBuilder val = new StringBuilder();
+                while (!stack.isEmpty() && stack.peek() != '[') {
+                    val.append(stack.pop());
                 }
                 stack.pop();
-
-                int times = 0;
-                int k = 1;
-                while (!stack.isEmpty() && stack.peek() != ']' && Character.isDigit(stack.peek())){
-                    times += Character.getNumericValue(stack.pop())*k;
-                    k *= 10;
+                StringBuilder nums = new StringBuilder();
+                while (!stack.isEmpty() && Character.isDigit(stack.peek())) {
+                    nums.append(stack.pop());
                 }
-
-                for (int m = 0;m<times;m++){
-                    for (int j = tmp.length()-1;j>=0;j--){
-                        char t = tmp.charAt(j);
-                        stack.push(t);
+                int n = Integer.parseInt(nums.reverse().toString());
+                String temp = val.reverse().toString();
+                for (int j = 0; j < n; j++) {
+                    for (char c : temp.toCharArray()) {
+                        stack.push(c);
                     }
                 }
+            } else {
+                stack.push(chars[i]);
             }
-            else {
-                stack.push(c);
-            }
+            i++;
         }
-
-        StringBuilder out = new StringBuilder();
         while (!stack.isEmpty()){
-            out.append(stack.pop());
+            str.append(stack.pop());
         }
-        return out.reverse().toString();
+        return str.reverse().toString();
     }
 }
