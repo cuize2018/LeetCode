@@ -1,8 +1,10 @@
 package leet;
 
+import java.util.Map;
+
 public class Solution198 {
-    public static void main(String[] args){
-        int[] a = {1,2,3,1};
+    public static void main(String[] args) {
+        int[] a = {1, 2, 3, 1};
         System.out.println(rob(a));
     }
 
@@ -37,30 +39,43 @@ public class Solution198 {
      * 二者之间取最大值
      */
     public static int rob(int[] nums) {
-        if (nums.length == 0)return 0;
+        if (nums.length == 0) return 0;
         int n = nums.length;
         int[] dp = new int[n];
 
-        for (int i = 0;i<n;i++){
-            if (i == 0)dp[i] = nums[i];
-            else if (i == 1)dp[i] = Math.max(nums[i-1], nums[i]);
-            else dp[i] = Math.max(dp[i-2]+nums[i], dp[i-1]);
+        for (int i = 0; i < n; i++) {
+            if (i == 0) dp[i] = nums[i];
+            else if (i == 1) dp[i] = Math.max(nums[i - 1], nums[i]);
+            else dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
         }
-        return dp[n-1];
+        return dp[n - 1];
     }
 
 
     public static int rob2(int[] nums) {
         int n = nums.length;
-        if (n == 0)return 0;
+        if (n == 0) return 0;
 
-        int[][] dp = new int[n+1][2];
+        int[][] dp = new int[n + 1][2];
 
         for (int i = 1; i <= n; i++) {
-            dp[i][0] = Math.max(dp[i-1][0], dp[i-1][1]);
-            dp[i][1] = dp[i-1][0] + nums[i-1];
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1]);
+            dp[i][1] = dp[i - 1][0] + nums[i - 1];
         }
 
-        return Math.max(dp[n][0],dp[n][1]);
+        return Math.max(dp[n][0], dp[n][1]);
     }
+
+    public static int rob3(int[] nums) {
+        if (nums.length == 0) return 0;
+        int[][] dp = new int[nums.length][2];
+        dp[0][0] = 0;
+        dp[0][1] = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1]);
+            dp[i][1] = dp[i - 1][0] + nums[i];
+        }
+        return Math.max(dp[nums.length - 1][0], dp[nums.length - 1][1]);
+    }
+
 }
