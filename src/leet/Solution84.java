@@ -1,12 +1,14 @@
 package leet;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.Stack;
 
 public class Solution84 {
     public static void main(String[] args) {
         int[] heights = {2, 1, 5, 6, 2, 3};
-        System.out.println(largestRectangleArea3(heights));
+        System.out.println(largestRectangleArea5(heights));
     }
 
     /**
@@ -117,5 +119,26 @@ public class Solution84 {
         return max;
     }
 
-
+    public static int largestRectangleArea5(int[] heights){
+        Deque<Integer> stack = new ArrayDeque<>();
+        int[] h = new int[heights.length+2];
+        System.arraycopy(heights, 0, h, 1, heights.length);
+        stack.push(0);
+        int max = 0;
+        int i = 1;
+        while (i < h.length){
+            if (!stack.isEmpty() && h[i] < h[stack.peek()]){
+                int h_t = h[stack.pop()];
+                while (!stack.isEmpty() && h[stack.peek()] == h_t){
+                    stack.pop();
+                }
+                max = Math.max(max, (i-stack.peek()-1)*h_t);
+            }
+            else {
+                stack.push(i);
+                i++;
+            }
+        }
+        return max;
+    }
 }
