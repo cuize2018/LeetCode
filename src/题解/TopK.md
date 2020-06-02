@@ -66,7 +66,7 @@ Top K 问题的另一个分治解法就比较难想到，需要在平时有算�
             swap(arr, left, right);
         }
         swap(arr, low, right);
-        // arr[lo .. j-1] <= arr[j] <= arr[j+1 .. hi]
+        // arr[low .. j-1] <= arr[j] <= arr[j+1 .. high]
         return right;
     }
 
