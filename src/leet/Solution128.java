@@ -48,22 +48,48 @@ public class Solution128 {
      * @return
      */
     public static int longestConsecutive2(int[] nums) {
-        if (nums.length == 0) return 0;
+        if (nums.length == 0) {
+            return 0;
+        }
 
         Set<Integer> set = new HashSet<>();
-        for (int val : nums) set.add(val);
+        for (int val : nums) {
+            set.add(val);
+        }
         int max = 0;
         for (int num : set) {
+            //找到连续序列的开始数字
             if (!set.contains(num - 1)) {
                 int currNum = num;
-                int len = 1;
-                while (set.contains(currNum + 1)) {
-                    currNum++;
-                    len++;
+                int count = 1;
+                while (set.contains(++currNum)) {
+                    count++;
                 }
-                max = Math.max(max, len);
+                max = Math.max(max, count);
             }
         }
         return max;
+    }
+
+
+    public static int longestConsecutive3(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        Arrays.sort(nums);
+        int[] dp = new int[nums.length];
+        dp[0] = 1;
+        int res = 1;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] - nums[i - 1] == 1) {
+                dp[i] = dp[i - 1] + 1;
+            } else if (nums[i] - nums[i - 1] == 0) {
+                dp[i] = dp[i - 1];
+            } else {
+                dp[i] = 1;
+            }
+            res = Math.max(res, dp[i]);
+        }
+        return res;
     }
 }
