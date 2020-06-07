@@ -64,7 +64,7 @@ public class Solution126 {
         // 已经访问过的单词集合：只找最短路径，所以之前出现过的单词不用出现在下一层
         Set<String> visited = new HashSet<>();
         // 字典中不包含目标单词
-        if (!dict.contains(endWord))return out;
+        if (!dict.contains(endWord)) return out;
 
         List<String> list = new ArrayList<>(Arrays.asList(beginWord));
         queue.add(list);
@@ -124,6 +124,66 @@ public class Solution126 {
                     res.add(String.valueOf(chs));
                 }
                 chs[i] = old_ch;
+            }
+        }
+        return res;
+    }
+
+
+    public static List<List<String>> findLadders3(String beginWord, String endWord, List<String> wordList) {
+        Queue<List<String>> queue = new ArrayDeque<>();
+        Set<String> visited = new HashSet<>();
+        Set<String> dict = new HashSet<>(wordList);
+        List<List<String>> res = new ArrayList<>();
+
+        List<String> list = new ArrayList<>();
+        list.add(beginWord);
+        queue.add(list);
+        visited.add(beginWord);
+
+        boolean flag = false;
+        while (!queue.isEmpty() && !flag) {
+            int size = queue.size();
+            Set<String> subVisited = new HashSet<>();
+            for (int i = 0; i < size; i++) {
+                List<String> lastPath = queue.remove();
+                String lastWord = lastPath.get(lastPath.size() - 1);
+
+                List<String> neighbors = getNeighbors2(lastWord, dict);
+                for (String neighbor : neighbors) {
+                    if (dict.contains(neighbor) && !visited.contains(neighbor)) {
+                        List<String> newPath = new ArrayList<>(lastPath);
+                        newPath.add(neighbor);
+                        if (neighbor.equals(endWord)) {
+                            flag = true;
+                            res.add(newPath);
+                        }
+                        queue.add(newPath);
+                        subVisited.add(neighbor);
+                    }
+                }
+            }
+            visited.addAll(subVisited);
+        }
+        return res;
+    }
+
+    public static List<String> getNeighbors2(String node, Set<String> dict){
+        List<String> res = new ArrayList<>();
+        if (dict.size() == 0)return res;
+
+        char[] chars = node.toCharArray();
+        for (char c = 'a';  c <= 'z'; c++) {
+            for (int i = 0; i < chars.length; i++) {
+                if (chars[i] == c)continue;
+
+                char old = chars[i];
+                chars[i] = c;
+                String newWord = String.valueOf(chars);
+                if (dict.contains(newWord)){
+                    res.add(newWord);
+                }
+                chars[i] = old;
             }
         }
         return res;
