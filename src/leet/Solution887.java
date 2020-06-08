@@ -15,7 +15,19 @@ public class Solution887 {
     public int superEggDrop(int K, int N) {
         return dp2(K, N);
     }
+
     //超时
+
+    /**
+     * 1、暴力穷举尝试在所有楼层 1 <= i <= N 扔鸡蛋，每次选择尝试次数最少的那一层；
+     * 2、每次扔鸡蛋有两种可能，要么碎，要么没碎；
+     * 3、如果鸡蛋碎了，F 应该在第 i 层下面，否则，F 应该在第 i 层上面；
+     * 4、鸡蛋是碎了还是没碎，取决于哪种情况下尝试次数更多，因为我们想求的是最坏情况下的结果。
+     *
+     * @param K
+     * @param N
+     * @return
+     */
     public int dp(int K, int N) {
         if (K == 1) return N;
         if (N == 0) return 0;
@@ -27,7 +39,9 @@ public class Solution887 {
 
         int res = Integer.MAX_VALUE;
         for (int i = 1; i <= N; i++) {
-            res = Math.min(res, Math.max(dp(K - 1, i - 1), dp(K, N - i)) + 1);
+            int broken = dp(K - 1, i - 1);
+            int notBroken = dp(K, N - i);
+            res = Math.min(res, Math.max(broken, notBroken) + 1);
         }
         map.put(key, res);
         return res;
@@ -65,23 +79,8 @@ public class Solution887 {
         return res;
     }
 
-
     public int superEggDrop2(int K, int N) {
         return dp4(K, N);
-    }
-    //超时
-    private int dp3(int k, int n) {
-        if (k == 1) return n;
-        if (n == 0) return 0;
-
-        int key = n * 100 + k;
-        if (map.containsKey(key)) return map.get(key);
-        int res = Integer.MAX_VALUE;
-        for (int i = 1; i <= n; i++) {
-            res = Math.min(res, Math.max(dp3(k - 1, i - 1), dp3(k, n - i)) + 1);
-        }
-        map.put(key, res);
-        return res;
     }
 
     private int dp4(int k, int n) {
@@ -112,13 +111,9 @@ public class Solution887 {
         return res;
     }
 
-
-
-
-
     private int dp5(int k, int n) {
-        int[][] dp = new int[k+1][n+1];
-        for (int i = 0; i < k+1; i++) {
+        int[][] dp = new int[k + 1][n + 1];
+        for (int i = 0; i < k + 1; i++) {
             Arrays.fill(dp[i], 9999);
         }
 
@@ -138,7 +133,7 @@ public class Solution887 {
         for (int i = 2; i <= k; i++) {
             for (int j = 2; j <= n; j++) {
                 for (int l = 1; l <= j; l++) {
-                    dp[i][j] = Math.min(dp[i][j], Math.max(dp[i-1][l-1], dp[i][j-l])+1);
+                    dp[i][j] = Math.min(dp[i][j], Math.max(dp[i - 1][l - 1], dp[i][j - l]) + 1);
                 }
             }
         }
@@ -168,22 +163,54 @@ public class Solution887 {
             for (int j = 2; j <= n; j++) {
                 int low = 1;
                 int high = j;
-                while (low < high){
-                    int middle =  low + (high - low + 1) / 2;
-                    int broken = dp[i-1][middle-1];
-                    int not_broken = dp[i][j-middle];
-                    if (broken > not_broken){
-                        high = middle-1;
-                    }
-                    else {
+                while (low < high) {
+                    int middle = low + (high - low + 1) / 2;
+                    int broken = dp[i - 1][middle - 1];
+                    int not_broken = dp[i][j - middle];
+                    if (broken > not_broken) {
+                        high = middle - 1;
+                    } else {
                         low = middle;
                     }
 
                 }
-                dp[i][j] = Math.max(dp[i-1][low-1], dp[i][j-low])+1;
+                dp[i][j] = Math.max(dp[i - 1][low - 1], dp[i][j - low]) + 1;
             }
         }
         return dp[k][n];
+    }
+
+    private int dpRe(int k, int n) {
+        if (k == 1) {
+            return n;
+        }
+        if (n == 0) {
+            return 0;
+        }
+        int hash = n * 100 + k;
+        if (map.containsKey(hash)) {
+            return map.get(hash);
+        }
+
+        int res = Integer.MAX_VALUE;
+        int left = 1;
+        int right = n;
+
+        while (left <= right) {
+            int mid = (left + right) >>> 1;
+            int broken = dpRe(k - 1, mid - 1);
+            int notBroken = dpRe(k, n - mid);
+
+            if (broken > notBroken) {
+                right = mid - 1;
+                res = Math.min(res, broken + 1);
+            } else {
+                left = mid + 1;
+                res = Math.min(res, notBroken + 1);
+            }
+        }
+        map.put(hash, res);
+        return res;
     }
 
 }
