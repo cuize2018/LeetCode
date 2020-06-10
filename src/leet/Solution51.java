@@ -3,16 +3,16 @@ package leet;
 import java.util.*;
 
 public class Solution51 {
-    List<List<String>> out = new ArrayList<>();
+    private List<List<String>> out = new ArrayList<>();
     private Set<Integer> colSet = new HashSet<>();
     private Set<Integer> rightAngleSet = new HashSet<>();
     private Set<Integer> leftAngleSet = new HashSet<>();
     private String[][] map;
 
     public static void main(String[] args) {
-        int n = 10;
+        int n = 4;
         Solution51 solution51 = new Solution51();
-        System.out.println(solution51.solveNQueens(n));
+        System.out.println(solution51.solveNQueens2(n));
     }
 
     /**
@@ -76,5 +76,47 @@ public class Solution51 {
 
     private boolean isValid(int row, int col) {
         return !colSet.contains(col) && !rightAngleSet.contains(row - col) && !leftAngleSet.contains(row + col);
+    }
+
+
+    public List<List<String>> solveNQueens2(int n) {
+        map = new String[n][n];
+        for (String[] strings : map) {
+            Arrays.fill(strings, ".");
+        }
+        dfs(0);
+        return out;
+    }
+
+    private void dfs(int row) {
+        if (row == map.length) {
+            List<String> list = new ArrayList<>();
+            for (String[] strings : map) {
+                String join = String.join("", strings);
+                list.add(join);
+            }
+            out.add(list);
+            return;
+        }
+
+        for (int j = 0; j < map[0].length; j++) {
+            if (!isValid2(row, j)) continue;
+
+            map[row][j] = "Q";
+            this.colSet.add(j);
+            this.leftAngleSet.add(row + j);
+            this.rightAngleSet.add(row - j);
+
+            dfs(row + 1);
+
+            map[row][j] = ".";
+            this.colSet.remove(j);
+            this.leftAngleSet.remove(row + j);
+            this.rightAngleSet.remove(row - j);
+        }
+    }
+
+    private boolean isValid2(int row, int col) {
+        return !colSet.contains(col) && !leftAngleSet.contains(row + col) && !rightAngleSet.contains(row - col);
     }
 }

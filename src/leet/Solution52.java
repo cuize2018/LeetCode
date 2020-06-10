@@ -59,15 +59,16 @@ public class Solution52 {
     /**
      * 动态规划
      * 如果在（i，j）位置（第i行第j列）放置一个皇后，接下来在哪些位置不能放置皇后呢？
-     *     1、整个第i行的位置都不能放置
-     *     2、整个第j列的位置都不能放置
-     *     3、如果位置（a,b）满足|a-i|==|b-j|,说明（a,b）与（i，j）处在同一条斜线上，也不能放置
+     * 1、整个第i行的位置都不能放置
+     * 2、整个第j列的位置都不能放置
+     * 3、如果位置（a,b）满足|a-i|==|b-j|,说明（a,b）与（i，j）处在同一条斜线上，也不能放置
      * 把递归过程直接设计成逐行放置皇后的方式，可以避开的那些不能放置的位置。
-     *
+     * <p>
      * 接下来用一个数组保存已经放置的皇后位置，假设数组为record，record[i]表示第i行皇后所在的列数。
      * 在递归计算到第i行第j列时，查看record[0..k](k<i)的值：
-     *     1、看是否有j相等的值，若有说明（i,j）不能放置皇后，
-     *     2、再看是否有|k-i|==|record[k]-j|,若有，也说明（i,j）不能放置皇后。
+     * 1、看是否有j相等的值，若有说明（i,j）不能放置皇后，
+     * 2、再看是否有|k-i|==|record[k]-j|,若有，也说明（i,j）不能放置皇后。
+     *
      * @param n
      * @return
      */
@@ -79,29 +80,28 @@ public class Solution52 {
     }
 
     private void queenHelper(int row, int[] temp, int n) {
-        if (row == n){
-           count++;
-           return;
+        if (row == n) {
+            count++;
+            return;
         }
 
         for (int col = 0; col < n; col++) {
             boolean isOk = checkIsValid(temp, row, col);
-            if (isOk){
+            if (isOk) {
                 temp[row] = col;
-                queenHelper(row+1, temp, n);
+                queenHelper(row + 1, temp, n);
                 temp[row] = 0;
             }
         }
     }
 
-
     private boolean checkIsValid(int[] temp, int row, int col) {
         for (int k = 0; k < row; k++) {
-            if (temp[k] == col){
+            if (temp[k] == col) {
                 return false;
             }
 
-            if (Math.abs(k-row) == Math.abs(temp[k] - col)){
+            if (Math.abs(k - row) == Math.abs(temp[k] - col)) {
                 return false;
             }
         }
@@ -109,4 +109,35 @@ public class Solution52 {
     }
 
 
+    public int totalNQueens3(int n) {
+        //record用来记录第i行皇后放置的列号
+        //record[i]表示第i行皇后在第record[i]列
+        int[] record = new int[n];
+        backtrack(0, record, n);
+        return count;
+    }
+
+    private void backtrack(int row, int[] record, int n) {
+        if (row == n) {
+            count++;
+            return;
+        }
+
+        for (int j = 0; j < n; j++) {
+            boolean valid = isValid(row, j, record);
+            if (valid) {
+                record[row] = j;
+                backtrack(row + 1, record, n);
+                record[row] = 0;
+            }
+        }
+    }
+
+    private boolean isValid(int i, int j, int[] record) {
+        for (int k = 0; k < i; k++) {
+            if (record[k] == j) return false;
+            if (Math.abs(k - i) == Math.abs(record[k] - j)) return false;
+        }
+        return true;
+    }
 }
