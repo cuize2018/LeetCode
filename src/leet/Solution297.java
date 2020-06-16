@@ -23,7 +23,7 @@ public class Solution297 {
         mov.right = new TreeNode(4);
 
 
-        CodecBinaryTree codecBinaryTree = new CodecBinaryTree();
+        Codec2 codecBinaryTree = new Codec2();
         String serialize = codecBinaryTree.serialize(root);
         System.out.println(serialize);
         TreeNode deserialize = codecBinaryTree.deserialize(serialize);
@@ -93,6 +93,62 @@ class CodecBinaryTree {
             queue.add(curr.left);
             queue.add(curr.right);
         }
+        return root;
+    }
+}
+
+
+class Codec2 {
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        List<String> res = new ArrayList<>();
+        if (root == null) return res.toString();
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.remove();
+                res.add(node == null ? "null" : String.valueOf(node.val));
+
+                if (node != null) {
+                    queue.add(node.left);
+                    queue.add(node.right);
+                }
+            }
+        }
+        return res.toString();
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data.equals("[]"))return null;
+        data = data.replace("[","");
+        data = data.replace("]","");
+        data = data.replace(" ","");
+
+        String[] nodes = data.split(",");
+
+        TreeNode root = new TreeNode(Integer.parseInt(nodes[0]));
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int idx = 1;
+
+        while (idx < nodes.length && !queue.isEmpty()){
+            TreeNode node = queue.remove();
+            if (node == null)continue;
+
+            node.left = nodes[idx].equals("null")?null:new TreeNode(Integer.parseInt(nodes[idx]));
+            node.right = nodes[idx+1].equals("null")?null:new TreeNode(Integer.parseInt(nodes[idx+1]));
+            idx += 2;
+
+            queue.add(node.left);
+            queue.add(node.right);
+        }
+
         return root;
     }
 }
