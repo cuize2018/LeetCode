@@ -73,20 +73,45 @@ public class Solution10 {
             for (int j = 0; j < len2; j++) {
                 if (p.charAt(j) == '.' || s.charAt(i) == p.charAt(j)) {
                     dp[i + 1][j + 1] = dp[i][j];
-                }
-                else if (p.charAt(j) == '*') {
+                } else if (p.charAt(j) == '*') {
                     if (p.charAt(j - 1) != s.charAt(i) && p.charAt(j - 1) != '.') {
                         dp[i + 1][j + 1] = dp[i + 1][j - 1];
                     } else {
                         dp[i + 1][j + 1] =
                                 dp[i + 1][j - 1]    // 0个匹配
-                                || dp[i + 1][j]     // 1个匹配
-                                || dp[i][j + 1];    // 多个匹配
+                                        || dp[i + 1][j]     // 1个匹配
+                                        || dp[i][j + 1];    // 多个匹配
                     }
                 }
             }
         }
         return dp[len1][len2];
+    }
+
+    public static boolean isMatch4(String s, String p) {
+        boolean[][] dp = new boolean[s.length() + 1][p.length() + 1];
+        dp[0][0] = true;
+
+        for (int i = 1; i <= p.length(); i++) {
+            if (p.charAt(i - 1) == '*' && dp[0][i - 2]) {
+                dp[0][i] = true;
+            }
+        }
+
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 1; j <= p.length(); j++) {
+                if (s.charAt(i - 1) == p.charAt(j - 1) || p.charAt(j - 1) == '.') {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else if (p.charAt(j - 1) == '*') {
+                    if (p.charAt(j - 2) != s.charAt(i - 1) && p.charAt(j - 2) != '.') {
+                        dp[i][j] = dp[i][j - 2];
+                    } else {
+                        dp[i][j] = dp[i][j - 2] || dp[i][j - 1] || dp[i - 1][j];
+                    }
+                }
+            }
+        }
+        return dp[s.length()][p.length()];
     }
 
 }
