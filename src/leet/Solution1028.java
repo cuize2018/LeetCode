@@ -6,66 +6,62 @@ public class Solution1028 {
     public static void main(String[] args) {
         String s = "1-5--9---1----4--5---3-6";
         TreeNode node = recoverFromPreorder(s);
-        int a = 0;
     }
 
     public static TreeNode recoverFromPreorder(String S) {
-        return help(S);
-    }
+        if (!S.contains("-")) return new TreeNode(Integer.parseInt(S));
 
-    private static TreeNode help(String s) {
         int i = 0;
-        char[] str = s.toCharArray();
+        char[] str = S.toCharArray();
         Stack<TreeNode> history = new Stack<>();
-        while (i < s.length() && s.charAt(i) != '-') {
+
+        while (i < S.length() && str[i] != '-') {
             i++;
         }
 
-        TreeNode mov = new TreeNode(Integer.parseInt(s.substring(0, i)));
-        TreeNode root = mov;
+        TreeNode root = new TreeNode(Integer.parseInt(S.substring(0, i)));
+        TreeNode mov = root;
         history.add(mov);
 
-        if (i >= s.length())return root;
-
-        int k = 0;
-        while (i<s.length() && str[i] == '-') {
-            k++;
+        int preDepth = 0;
+        while (i < S.length() && str[i] == '-') {
+            preDepth++;
             i++;
         }
+
         int t = i;
-        while (i < s.length() && s.charAt(i) != '-') {
+        while (i < S.length() && str[i] != '-') {
             i++;
         }
-        mov.left = new TreeNode(Integer.parseInt(s.substring(t, i)));
+        mov.left = new TreeNode(Integer.parseInt(S.substring(t, i)));
 
-        while (i < s.length()) {
-            int k2 = 0;
+        while (i < S.length()) {
+            int currDepth = 0;
             while (str[i] == '-') {
-                k2++;
+                currDepth++;
                 i++;
             }
             int startIdx = i;
-            while (i < s.length() && s.charAt(i) != '-') {
+            while (i < S.length() && str[i] != '-') {
                 i++;
             }
 
-            int val = Integer.parseInt(s.substring(startIdx, i));
-            if (k2 > k) {
+            int val = Integer.parseInt(S.substring(startIdx, i));
+            if (currDepth > preDepth) {
                 mov = mov.right == null ? mov.left : mov.right;
                 mov.left = new TreeNode(val);
                 history.add(mov);
-            } else if (k2 == k) {
+            } else if (currDepth == preDepth) {
                 mov.right = new TreeNode(val);
-            } else { //k2 < k
-                int dis = k - k2;
+            } else { //currDepth < preDepth
+                int dis = preDepth - currDepth;
                 for (int j = 0; j < dis; j++) {
                     history.pop();
                 }
-                TreeNode treeNode = history.peek();
-                mov = treeNode;
+                mov = history.peek();
                 mov.right = new TreeNode(val);
             }
-            k = k2;
+            preDepth = currDepth;
         }
 
         return root;

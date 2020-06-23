@@ -2,8 +2,8 @@ package leet;
 
 public class Solution343 {
     public static void main(String[] args) {
-        int n = 10;
-        System.out.println(integerBreak(n));
+        int n = 5;
+        System.out.println(integerBreak2(n));
     }
 
     /**
@@ -32,20 +32,38 @@ public class Solution343 {
         dp[0] = 1;
         dp[1] = 1;
 
-        for (int i = 2;i < n;i++){
+        for (int i = 2; i < n; i++) {
             int i_j = i;
-            int dpi_dpj = dp[0]*dp[i-1];
-            int i_dpj = dp[i-1];
-            int dpi_j = dp[0]*i;
+            int dpi_dpj = dp[0] * dp[i - 1];
+            int i_dpj = dp[i - 1];
+            int dpi_j = dp[0] * i;
 
             int max = Math.max(Math.max(Math.max(dpi_dpj, i_j), i_dpj), dpi_j);
-            for (int j = 1;j < (i+1)/2;j++){
-                i_j = (j+1)*(i-j); dpi_dpj = dp[j]*dp[i-j-1];
-                i_dpj = (j+1)*dp[i-j-1]; dpi_j = dp[j]*(i-j);
-                max = Math.max(max, Math.max(Math.max(Math.max(dpi_dpj,i_j), i_dpj), dpi_j));
+            for (int j = 1; j < (i + 1) / 2; j++) {
+                i_j = (j + 1) * (i - j);
+                dpi_dpj = dp[j] * dp[i - j - 1];
+                i_dpj = (j + 1) * dp[i - j - 1];
+                dpi_j = dp[j] * (i - j);
+                max = Math.max(max, Math.max(Math.max(Math.max(dpi_dpj, i_j), i_dpj), dpi_j));
             }
             dp[i] = max;
         }
-        return dp[n-1];
+        return dp[n - 1];
+    }
+
+
+    public static int integerBreak2(int n) {
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        dp[2] = 1;
+
+        for (int i = 3; i <= n; i++) {
+            int max = i % 2 == 0 ? (i / 2) * (i / 2) : (i / 2) * (i - i / 2);
+            for (int j = 1; j <= Math.ceil(i / 2D); j++) {
+                max = Math.max(max, dp[i - j] * j);
+            }
+            dp[i] = max;
+        }
+        return dp[n];
     }
 }
