@@ -74,28 +74,30 @@ public class Solution209 {
     }
 
     public static int minSubArrayLen4(int s, int[] nums) {
-        if (nums.length == 0) return -1;
-        if (nums.length == 1) {
-            if (nums[0] >= s) return 1;
-            return -1;
+        if (nums.length == 0)return 0;
+        if (nums.length == 1){
+            if (nums[0] >= s)return 1;
+            return 0;
         }
 
         int left = 0;
-        int right = 1;
+        int right = 0;
         int res = Integer.MAX_VALUE;
-        int currSum = nums[left] + nums[right];
-        while (right < nums.length) {
-            if (left <= right && currSum >= s) {
-                res = Math.min(right - left + 1, res);
+        int currSum = nums[left];
+        while (right < nums.length){
+            if (left <= right && currSum >= s){
+                res = Math.min(right-left+1, res);
                 currSum -= nums[left];
                 left++;
-            } else {
+            }
+            else {
                 right++;
                 if (right < nums.length) {
                     currSum += nums[right];
                 }
             }
         }
-        return res;
+        return res==Integer.MAX_VALUE?0:res;
+        //return res;
     }
 }
