@@ -1,31 +1,42 @@
 package leet;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Stack;
 
 public class Solution42 {
     public static void main(String[] args){
         int[] h = {4,2,3};
-        System.out.println(trap3(h));
+        System.out.println(trap(h));
     }
 
+    /**
+     * 单调栈，入栈逐渐递减的索引，当遇到第一个大于栈顶高度的索引开始计算面积
+     * @param height
+     * @return
+     */
     public static int trap(int[] height) {
+        if (height.length == 0)return 0;
+        Deque<Integer> stack = new ArrayDeque<>();
         int sum = 0;
-        Stack<Integer> stack = new Stack<>();
-        int curr = 0;
-
-        while (curr < height.length){
-            while (!stack.isEmpty() && height[curr] > height[stack.peek()]){
-                int h = height[stack.peek()];
-                stack.pop();
-                if (stack.isEmpty()){
-                    break;
-                }
-                int min = Math.min(height[curr], height[stack.peek()]);
-                sum += (min-h)*(curr-stack.peek()-1);
+        int i = 0;
+        while (i < height.length){
+            if (stack.isEmpty() || height[i] <= height[stack.peek()]){
+                stack.push(i);
+                i++;
             }
-
-            stack.push(curr);
-            curr++;
+            else {
+                int downHeight = height[stack.peek()];
+                while (!stack.isEmpty() && height[stack.peek()] == downHeight){
+                    stack.pop();
+                }
+                if (!stack.isEmpty()) {
+                    int h = Math.min(height[stack.peek()], height[i]) - downHeight;
+                    int l = i - stack.peek() - 1;
+                    sum += l * h;
+                }
+            }
         }
         return sum;
     }
@@ -56,37 +67,5 @@ public class Solution42 {
         return sum;
     }
 
-    /**
-     * 单调栈，入栈逐渐递减的索引，当遇到第一个大于栈顶高度的索引开始计算面积
-     * @param height
-     * @return
-     */
-    public static int trap3(int[] height) {
-        Stack<Integer> stack = new Stack<>();
-        stack.push(0);
 
-        int res = 0;
-        int i = 1;
-        while (i < height.length){
-            if (stack.isEmpty() || height[i] <= height[stack.peek()]){//入栈小于等于栈顶高度的索引
-                stack.push(i);
-                i++;
-            }
-            else {
-                if (!stack.isEmpty()) {
-                    int currHeight = height[stack.pop()];
-                    while (!stack.isEmpty() && height[stack.peek()] == currHeight) {
-                        stack.pop();
-                    }
-                    if (!stack.isEmpty()) {
-                        //高度为左右两边较小的高度-当前高度
-                        int h = Math.min(height[stack.peek()], height[i]) - currHeight;
-                        int width = i - 1 - stack.peek();
-                        res += h * width;
-                    }
-                }
-            }
-        }
-        return res;
-    }
 }

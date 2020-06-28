@@ -8,52 +8,87 @@ import java.util.Arrays;
 /**
  * 给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。
  * 假定每组输入只存在唯一答案。
- *
+ * <p>
  * 例如，给定数组 nums = [-1，2，1，-4], 和 target = 1.
- *
+ * <p>
  * 与 target 最接近的三个数的和为 2. (-1 + 2 + 1 = 2).
  */
 public class Solution16 {
-    public static void main(String[] args){
-        int[] num = {1,1,1,0};
-        System.out.println(threeSumClosest(num,100));
+    public static void main(String[] args) {
+        int[] num = {0, 2, 1, -3};
+        int target = 1;
+        System.out.println(threeSumClosest2(num, target));
     }
 
     /**
      * 双指针
+     *
      * @param nums
      * @param target
      * @return
      */
-    public static int threeSumClosest(int[] nums, int target){
+    public static int threeSumClosest(int[] nums, int target) {
         Arrays.sort(nums);
-        int out_val = nums[0] + nums[1] + nums[2];
-        int dis = Math.abs(target - out_val);
+        int resSum = -1;
+        int minDis = Integer.MAX_VALUE;
 
-        for (int i = 0;i<nums.length;i++){
-            int left = i+1;
-            int right = nums.length-1;
-
-            while (right > left){
-                int val = nums[i] + nums[left] + nums[right];
-                int tmp_dis = Math.abs(target-val);
-
-                if (tmp_dis < dis){
-                    dis = tmp_dis;
-                    out_val = val;
+        for (int i = 0; i < nums.length; i++) {
+            int start = nums[i];
+            int left = i + 1;
+            int right = nums.length - 1;
+            while (left < right) {
+                int sum = start + nums[left] + nums[right];
+                int distance = Math.abs(sum - target);
+                if (distance < minDis) {
+                    minDis = distance;
+                    resSum = sum;
                 }
-                if (val > target){
+
+                if (sum > target) {
                     right--;
-                }
-                else if (val < target){
+                } else if (sum < target) {
                     left++;
-                }
-                else {
-                    return val;
+                } else return sum;
+            }
+        }
+        return resSum;
+    }
+
+    public static int threeSumClosest2(int[] nums, int target) {
+        Arrays.sort(nums);
+        int res = -1;
+        int minLen = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            int start = nums[i];
+            int left = i + 1;
+            int right = nums.length - 1;
+
+            while (left < right) {
+                int sum = start + nums[left] + nums[right];
+                int distance = Math.abs(sum - target);
+
+                if (distance <= minLen) {
+                    res = sum;
+                    minLen = distance;
+
+                    int a = Math.abs(nums[left + 1] + nums[right] + start - target);
+                    int b = Math.abs(nums[left] + nums[right - 1] + start - target);
+                    if (a < b) {
+                        left++;
+                    } else {
+                        right--;
+                    }
+                } else {
+                    if (sum - target > 0) {
+                        right--;
+                    } else {
+                        left++;
+                    }
                 }
             }
         }
-
-        return out_val;
+        return res;
     }
+
+
 }
