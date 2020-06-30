@@ -8,8 +8,7 @@ public class Solution02 {
         int a = scanner.nextInt();
 
         double res = getCubeRoot(a);
-        String s = String.format("%.1f", res);
-        System.out.println(Double.parseDouble(s));
+        System.out.printf("%.1f\n", res);
     }
 
     public static double getCubeRoot(double input) {
