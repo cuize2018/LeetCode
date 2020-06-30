@@ -21,46 +21,49 @@ public class Solution215 {
         return heap.peek();
     }
 
-
     public static int findKthLargest2(int[] nums, int k) {
-        int size = nums.length;
-        return quickSearch(nums, size - k, 0, nums.length - 1);
+        return quickSort(nums, 0, nums.length - 1, nums.length - k);
     }
 
-    private static int quickSearch(int[] nums, int k, int low, int high) {
+    private static int quickSort(int[] nums, int low, int high, int k) {
         if (low == high) return nums[low];
-        int m = partition(nums, low, high);
-        if (m == k) return nums[k];
+        int m = paration(nums, low, high);
+
+        if (k == m) {
+            return nums[m];
+        }
 
         if (m > k) {
-            return quickSearch(nums, k, low, m - 1);
+            return quickSort(nums, low, m - 1, k);
         } else {
-            return quickSearch(nums, k, m + 1, high);
+            return quickSort(nums, m + 1, high, k);
         }
     }
 
-    private static int partition(int[] nums, int low, int high) {
-        int left = low;
-        int right = high + 1;
+    private static int paration(int[] nums, int low, int high) {
+        int i = low;
+        int j = high + 1;
         int v = nums[low];
 
         while (true) {
-            while (nums[++left] < v) {
-                if (left == high) break;
+            while (nums[++i] < v) {
+                if (i == high) break;
             }
-            while (nums[--right] > v) {
-                if (right == low) break;
+            while (nums[--j] > v) {
+                if (j == low) break;
             }
-            if (left >= right) break;
-            swap(nums, left, right);
+            if (i >= j) break;
+            swap(nums, i, j);
         }
-        swap(nums, low, right);
-        return right;
+        swap(nums, low, j);
+        return j;
     }
 
-    private static void swap(int[] nums, int left, int right) {
-        int temp = nums[left];
-        nums[left] = nums[right];
-        nums[right] = temp;
+    private static void swap(int[] nums, int i, int j) {
+        int temp = nums[j];
+        nums[j] = nums[i];
+        nums[i] = temp;
     }
+
+
 }
