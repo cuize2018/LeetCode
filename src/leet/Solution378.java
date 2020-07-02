@@ -4,7 +4,16 @@ import java.util.PriorityQueue;
 
 public class Solution378 {
     public static void main(String[] args) {
+        int[][] matrix = {
+                {1, 5, 9},
+                {10, 11, 13},
+                {12, 13, 15}
+        };
 
+        int k = 7;
+
+        int i = kthSmallest3(matrix, k);
+        System.out.println(i);
     }
 
     public static int kthSmallest(int[][] matrix, int k) {
@@ -16,7 +25,7 @@ public class Solution378 {
             }
         }
 
-        for (int i = 0;i<k-1;i++){
+        for (int i = 0; i < k - 1; i++) {
             pq.remove();
         }
         return pq.remove();
@@ -29,10 +38,6 @@ public class Solution378 {
      * 4.若这个count大于k，表明第k小的数在左半部分且可能包含mid，即left=left, right=mid，又保证了第k小的数在left~right之间
      * 5.因为每次循环中都保证了第k小的数在left~right之间，当left==right时，第k小的数即被找出，等于right
      *
-     * 作者：jacksu1024
-     * 链接：https://leetcode-cn.com/problems/kth-smallest-element-in-a-sorted-matrix/solution/er-fen-chao-ji-jian-dan-by-jacksu1024/
-     * 来源：力扣（LeetCode）
-     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      * @param matrix
      * @param k
      * @return
@@ -42,24 +47,24 @@ public class Solution378 {
         int col = matrix[0].length;
 
         int left = matrix[0][0];
-        int right = matrix[row-1][col-1];
+        int right = matrix[row - 1][col - 1];
 
-        while (left < right){
-            int mid = (left+right)/2;
+        while (left < right) {
+            int mid = (left + right) / 2;
             int count = LessThanMidCount(matrix, row, col, mid);
-            if (count < k){//第k小的值在mid右边
-                left = mid+1;
-            }
-            else{//第k小的值在mid左边
+            if (count < k) {//第k小的值在mid右边
+                left = mid + 1;
+            } else {//第k小的值在mid左边
                 right = mid;
             }
         }
         return right;
     }
 
-    private static int LessThanMidCount(int[][] mat, int row, int col, int mid){
+    private static int LessThanMidCount(int[][] mat, int row, int col, int mid) {
         int count = 0;
-        int i = row-1;int j = 0;
+        int i = row - 1;
+        int j = 0;
         while (i >= 0 && j < col) {
             if (mat[i][j] <= mid) {
                 // 第j列有i+1个元素<=mid
@@ -67,6 +72,43 @@ public class Solution378 {
                 j++;
             } else {
                 // 第j列目前的数大于mid，需要继续在当前列往上找
+                i--;
+            }
+        }
+        return count;
+    }
+
+
+    public static int kthSmallest3(int[][] matrix, int k) {
+        int rows = matrix.length;
+        if (rows == 0) return 0;
+        int cols = matrix[0].length;
+
+        int left = matrix[0][0];
+        int right = matrix[rows - 1][cols - 1];
+
+        while (left < right) {
+            int mid = (left + right) >>> 1;
+            int count = lessThanMid(matrix, mid);
+
+            if (count < k) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+
+    private static int lessThanMid(int[][] matrix, int mid) {
+        int i = matrix.length - 1;
+        int j = 0;
+        int count = 0;
+        while (i >= 0 && j < matrix[0].length) {
+            if (matrix[i][j] <= mid) {
+                count += i + 1;
+                j++;
+            } else {
                 i--;
             }
         }
