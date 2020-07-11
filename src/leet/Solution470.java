@@ -38,4 +38,18 @@ public class Solution470 {
         return random.nextInt(7)+1;
     }
 
+    public static int rand102(){
+        int row = rand7();
+        int col = rand7();
+        int idx = (row-1)*7 + col;
+
+        while (idx > 40){
+            row = rand7();
+            col = rand7();
+            idx = (row-1)*7 + col;
+        }
+        return idx%10 == 0?10:idx%10;
+    }
+
+
 }
