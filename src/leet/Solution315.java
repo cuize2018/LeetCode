@@ -1,6 +1,7 @@
 package leet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Solution315 {
@@ -9,7 +10,8 @@ public class Solution315 {
     int[] counts;
 
     public static void main(String[] args) {
-
+        int[] nums = {-1, -1};
+        System.out.println(countSmaller2(nums));
     }
 
     public List<Integer> countSmaller(int[] nums) {
@@ -33,6 +35,7 @@ public class Solution315 {
 
     /**
      * 针对数组 nums 指定的区间 [l, r] 进行归并排序，在排序的过程中完成统计任务
+     *
      * @param nums
      * @param left
      * @param right
@@ -90,5 +93,108 @@ public class Solution315 {
             }
         }
 
+    }
+
+
+    public static List<Integer> countSmaller2(int[] nums) {
+        if (nums.length == 0) return new ArrayList<>();
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            int num = quickSort(Arrays.copyOfRange(nums, i, nums.length));
+            res.add(num);
+        }
+        return res;
+    }
+
+    private static int quickSort(int[] nums) {
+        if (nums.length == 1) return 0;
+        int low = 0;
+        int high = nums.length - 1;
+
+        int i = low;
+        int j = high + 1;
+        int v = nums[0];
+        int count = 0;
+        while (true) {
+            while (nums[++i] <= v) {
+                if (nums[i] == v) count++;
+                if (i == high) break;
+            }
+            while (nums[--j] >= v) {
+                if (j == low) break;
+            }
+            if (i >= j) break;
+            swap(nums, i, j);
+        }
+
+        swap(nums, low, j);
+        return Math.max(j - low - count, 0);
+    }
+
+    private static void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    public List<Integer> countSmaller3(int[] nums) {
+        if (nums.length == 0) return new ArrayList<>();
+        List<Integer> res = new ArrayList<>();
+
+        indexes = new int[nums.length];
+        temp = new int[nums.length];
+        counts = new int[nums.length];
+
+        for (int i = 0; i < nums.length; i++) {
+            indexes[i] = i;
+        }
+
+        mergeWay(nums, 0, nums.length-1);
+        for (int count : counts) {
+            res.add(count);
+        }
+        return res;
+    }
+
+    private void mergeWay(int[] nums, int low, int high) {
+        if (low < high){
+            int mid = (low+high)>>>1;
+            mergeWay(nums, low, mid);
+            mergeWay(nums, mid+1, high);
+
+            if (nums[indexes[mid]] > nums[indexes[mid+1]]){
+                mergeCount(nums, low, mid, high);
+            }
+        }
+    }
+
+    private void mergeCount(int[] nums, int low, int mid, int high) {
+        for (int i = low; i <= high; i++) {
+            temp[i] = indexes[i];
+        }
+
+        int i = low;
+        int j = mid+1;
+
+        for (int k = low; k <= high; k++) {
+            if (i > mid){
+                indexes[k] = temp[j];
+                j++;
+            }
+            else if (j > high){
+                indexes[k] = temp[i];
+                i++;
+                counts[indexes[k]] += high - mid;
+            }
+            else if (nums[temp[i]] <= nums[temp[j]]){
+                indexes[k] = temp[i];
+                i++;
+                counts[indexes[k]] += j-mid-1;
+            }
+            else {
+                indexes[k] = temp[j];
+                j++;
+            }
+        }
     }
 }

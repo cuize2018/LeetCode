@@ -1,8 +1,6 @@
 package leet;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Solution94 {
     public static void main(String[] args){
@@ -15,7 +13,7 @@ public class Solution94 {
         root.left = new TreeNode(3);
         root.right = null;
 
-        System.out.println(inorderTraversal(root_copy));
+        System.out.println(inorderTraversal3(root_copy));
     }
 
     /**
@@ -57,5 +55,24 @@ public class Solution94 {
         }
         return out;
     }
+
+    public static List<Integer> inorderTraversal3(TreeNode root) {
+        if (root == null)return new ArrayList<>();
+        List<Integer> res = new ArrayList<>();
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        TreeNode mov = root;
+
+        while (mov != null || !stack.isEmpty()){
+            while (mov != null){
+                stack.push(mov);
+                mov = mov.left;
+            }
+            mov = stack.pop();
+            res.add(mov.val);
+            mov = mov.right;
+        }
+        return res;
+    }
+
 
 }

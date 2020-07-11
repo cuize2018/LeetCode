@@ -1,7 +1,6 @@
 package leet;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Solution144 {
     public static List<Integer> preorderTraversal(TreeNode root) {
@@ -15,5 +14,26 @@ public class Solution144 {
         out.addAll(preorderTraversal(root.left));
         out.addAll(preorderTraversal(root.right));
         return out;
+    }
+
+    public static List<Integer> preorderTraversal2(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        Deque<TreeNode> stack = new ArrayDeque<>();
+
+        if (root == null)return res;
+        stack.add(root);
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            res.add(node.val);
+
+            if (node.right != null) {
+                stack.add(node.right);
+            }
+            if (node.left != null) {
+                stack.add(node.left);
+            }
+        }
+        return res;
+
     }
 }
