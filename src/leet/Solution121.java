@@ -4,20 +4,6 @@ public class Solution121 {
     public static void main(String[] args) {
 
     }
-
-    public static int maxProfit(int[] prices) {
-        int max = 0;
-        for (int i = 0; i < prices.length; i++) {
-            int buy = prices[i];
-            for (int j = i + 1; j < prices.length; j++) {
-                if (prices[j] > buy) {
-                    max = Math.max(max, prices[j] - buy);
-                }
-            }
-        }
-        return max;
-    }
-
     /**
      * base case：
      * dp[-1][k][0] = dp[i][0][0] = 0
@@ -65,5 +51,24 @@ public class Solution121 {
             dp_i_1 = Math.max(dp_i_1, -price);
         }
         return dp_i_0;
+    }
+
+    public static int maxProfit4(int[] prices) {
+        int n = prices.length;
+        if (n == 0)return 0;
+
+        int[][] dp = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            if (i == 0){
+                dp[i][0] = 0;
+                dp[i][1] = -prices[i];
+            }
+            else {
+                //
+                dp[i][0] = Math.max(dp[i-1][0], dp[i-1][1] + prices[i]);
+                dp[i][1] = Math.max(dp[i-1][1], -prices[i]);
+            }
+        }
+        return dp[n-1][0];
     }
 }
