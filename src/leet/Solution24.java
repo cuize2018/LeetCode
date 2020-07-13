@@ -58,4 +58,54 @@ public class Solution24 {
         }
         return headCopy;
     }
+
+    public static ListNode swapPairs2(ListNode head) {
+        if (head == null)return null;
+        ListNode fast = head;
+        ListNode slow = head;
+        int i = 0;
+        while (i++ < 2 && fast != null){
+            fast = fast.next;
+        }
+        if (fast == null){
+            return reverse(slow, fast);
+        }
+
+        boolean first = true;
+        ListNode subTail = slow;
+        while (fast != null){
+            ListNode t = reverse(slow, fast);
+            if (first){
+                head = t;
+                first = false;
+            }
+            else {
+                subTail.next = t;
+            }
+
+            subTail = slow;
+            slow = fast;
+            i = 0;
+            while (i++ < 2 && fast != null) {
+                fast = fast.next;
+            }
+            if (fast == null){
+                subTail.next = reverse(slow, fast);
+            }
+        }
+        return head;
+    }
+
+    private static ListNode reverse(ListNode start, ListNode end) {
+        ListNode pre = end;
+        ListNode mov = start;
+
+        while (mov != end){
+            ListNode nextNode = mov.next;
+            mov.next = pre;
+            pre = mov;
+            mov = nextNode;
+        }
+        return pre;
+    }
 }
