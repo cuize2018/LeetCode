@@ -90,5 +90,30 @@ public class Solution16 {
         return res;
     }
 
+    public static int threeSumClosest3(int[] nums, int target) {
+        Arrays.sort(nums);
+        int minDis = Integer.MAX_VALUE;
+        int res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            int left = i + 1;
+            int right = nums.length - 1;
+            while (left < right) {
+                int sum = nums[i] + nums[left] + nums[right];
+                int dis = Math.abs(sum - target);
+                if (dis < minDis) {
+                    minDis = dis;
+                    res = sum;
+                }
 
+                if (right < nums.length - 1 && nums[right] == nums[right + 1] || sum > target) {
+                    right--;
+                } else if (left > i + 1 && nums[left] == nums[left - 1] || sum < target) {
+                    left++;
+                } else {
+                    return sum;
+                }
+            }
+        }
+        return res;
+    }
 }
