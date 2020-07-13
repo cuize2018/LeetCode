@@ -129,7 +129,7 @@ public class Solution15 {
 
     public static List<List<Integer>> threeSum4(int[] nums) {
         Arrays.sort(nums);
-        Set<List<Integer>> res = new HashSet<>();
+        List<List<Integer>> res = new ArrayList<>();
         for (int i = 0; i < nums.length; i++) {
             int v = nums[i];
             if (v > 0) break;
@@ -152,6 +152,6 @@ public class Solution15 {
                 }
             }
         }
-        return new ArrayList<>(res);
+        return res;
     }
 }
