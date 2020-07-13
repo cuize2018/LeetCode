@@ -31,52 +31,56 @@ public class Solution23 {
      * @param lists
      * @return
      */
-    public static ListNode mergeKLists3(ListNode[] lists) {
-        if (lists.length == 0) return null;
-        if (lists.length == 1) return lists[0];
 
-        int left = 0;
-        int right = lists.length - 1;
-        int middle = (left + right) >>> 1;
-
-        ListNode leftList = mergeKLists3(Arrays.copyOfRange(lists, 0, middle + 1));
-        ListNode rightList = mergeKLists3(Arrays.copyOfRange(lists, middle + 1, right + 1));
-
-        return mergeTwoLists2(leftList, rightList);
+    public static ListNode mergeKLists(ListNode[] lists) {
+        int n = lists.length;
+        if (n == 0) return null;
+        if (n == 1) return lists[0];
+        return mergeKListsDis(lists, 0, lists.length - 1);
     }
 
-    private static ListNode mergeTwoLists2(ListNode l1, ListNode l2) {
-        if (l1 == null && l2 == null) return null;
-        if (l1 == null) return l2;
-        if (l2 == null) return l1;
-        ListNode res;
-        ListNode mov;
-        if (l1.val < l2.val) {
-            mov = l1;
-            l1 = l1.next;
+    private static ListNode mergeKListsDis(ListNode[] lists, int l, int r) {
+        if (l == r) return lists[l];
+
+        int mid = (l + r) >>> 1;
+        ListNode leftNode = mergeKListsDis(lists, l, mid);
+        ListNode rightNode = mergeKListsDis(lists, mid + 1, r);
+
+        return merge(leftNode, rightNode);
+    }
+
+    private static ListNode merge(ListNode a, ListNode b) {
+        if (a == null) return b;
+        if (b == null) return a;
+
+        ListNode mov = a.val <= b.val ? a : b;
+        ListNode res = mov;
+
+        if (a.val <= b.val) {
+            a = a.next;
         } else {
-            mov = l2;
-            l2 = l2.next;
+            b = b.next;
         }
-        res = mov;
 
-        while (l1 != null && l2 != null) {
-            if (l1.val < l2.val) {
-                mov.next = l1;
-                l1 = l1.next;
+        while (a != null && b != null) {
+            if (a.val <= b.val) {
+                mov.next = a;
+                mov = mov.next;
+                a = a.next;
             } else {
-                mov.next = l2;
-                l2 = l2.next;
+                mov.next = b;
+                mov = mov.next;
+                b = b.next;
             }
-            mov = mov.next;
         }
-
-        if (l1 != null) mov.next = l1;
-        if (l2 != null) mov.next = l2;
+        if (a != null) {
+            mov.next = a;
+        }
+        if (b != null) {
+            mov.next = b;
+        }
         return res;
     }
-
-
 }
 
 
