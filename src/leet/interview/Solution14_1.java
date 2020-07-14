@@ -44,4 +44,21 @@ public class Solution14_1 {
         }
         return dp[n];
     }
+
+    public static int cuttingRope2(int n) {
+        int[] dp = new int[n+1];
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            if (i % 2 == 0){
+                dp[i] = i/2 * i/2;
+            }
+            else {
+                dp[i] = (i/2)* (i/2+1);
+            }
+            for (int j = i-1; j >= 0 ; j--) {
+                dp[i] = Math.max(dp[i], dp[j] * (i-j));
+            }
+        }
+        return dp[n];
+    }
 }
