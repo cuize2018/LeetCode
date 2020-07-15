@@ -47,4 +47,36 @@ public class Solution322 {
         return dp[amount];
     }
 
+    public static int coinChange3(int[] coins, int amount) {
+        int[] dp = new int[amount+1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
+
+        for (int coin : coins) {
+            for (int i = coin; i <= amount ; i++) {
+                if (dp[i-coin] != -1) {
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                }
+            }
+        }
+        return dp[amount] == Integer.MAX_VALUE?-1:dp[amount];
+    }
+
+    //带数目限制，多重背包
+    public static int coinChange4(int[] coins, int amount, int[] nums) {
+        int[] dp = new int[amount+1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
+
+        for (int i = 1; i <= coins.length; i++) {
+            for (int j = amount; j >= coins[i - 1]; j--) {
+                for (int k = 0; k <= Math.min(nums[i - 1], j / coins[i - 1]); k++) {
+                    if (dp[j - k * coins[i - 1]] != -1) {
+                        dp[j] = Math.min(dp[j], dp[j - k * coins[i - 1]] + k);
+                    }
+                }
+            }
+        }
+        return dp[amount] == Integer.MAX_VALUE?-1:dp[amount];
+    }
 }
