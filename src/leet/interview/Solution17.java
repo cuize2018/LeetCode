@@ -2,18 +2,8 @@ package leet.interview;
 
 public class Solution17 {
     public static void main(String[] args) {
-        int n = 3;
-        printNumbers2(n);
-    }
-
-    public static int[] printNumbers(int n) {
-        int len = (int) (Math.pow(10, n) - 1);
-        int[] res = new int[len];
-
-        for (int i = 1; i <= len; i++) {
-            res[i - 1] = i;
-        }
-        return res;
+        int n = 4;
+        printNumbers(n);
     }
 
     /**
@@ -21,38 +11,34 @@ public class Solution17 {
      *
      * @param n
      */
-    public static void printNumbers2(int n) {
-        StringBuilder str = new StringBuilder();
+    public static void printNumbers(int n) {
+        StringBuilder num = new StringBuilder();
         for (int i = 0; i < n; i++) {
-            str.append('0');
+            num.append('0');
         }
-
-        while (increase(str)) {
-            int idx = 0;
-            while (idx < str.length() && str.charAt(idx) == '0') idx++;
-            System.out.print(str.toString().substring(idx) + " , ");
+        
+        while (increase(num)){
+            System.out.println(num.toString() + " , ");
         }
     }
 
-    private static boolean increase(StringBuilder str) {
-        boolean add = false;
-        for (int i = str.length() - 1; i >= 0; i--) {
-            char c = str.charAt(i);
-            int val = c - '0';
-
-            if (i == str.length() - 1) val++;
-            if (add) val++;
-
-            if (val < 10) {
-                add = false;
-            } else {
+    private static boolean increase(StringBuilder num) {
+        int add = 0;
+        for (int i = num.length() - 1; i >=0 ; i--) {
+            int val = num.charAt(i) - '0';
+            if (i == num.length() - 1)val++;
+            val = val + add;
+            if (val >= 10){
                 val -= 10;
-                add = true;
+                add = 1;
             }
-            str.setCharAt(i, (char) ('0' + val));
-            if (add && i == 0) return false;
-            if (!add) return true;
+            else {
+                add = 0;
+            }
+            num.setCharAt(i, (char) (val + '0'));
+            if (add == 0)return true;
         }
+        if (add != 0)return false;
         return true;
     }
 }
