@@ -31,4 +31,28 @@ public class Solution07 {
         }
         return root;
     }
+
+    public static TreeNode buildTree2(int[] preorder, int[] inorder) {
+        if (preorder.length == 0)return null;
+        if (preorder.length == 1)return new TreeNode(preorder[0]);
+
+        TreeNode root = new TreeNode(preorder[0]);
+        for (int i = 0; i < inorder.length; i++) {
+            if (inorder[i] == preorder[0]){
+                int leftLen = i;
+                int[] preorderLeft = Arrays.copyOfRange(preorder, 1, 1 + leftLen);
+                int[] inorderLeft = Arrays.copyOfRange(inorder, 0, i);
+
+                int[] preorderRight = Arrays.copyOfRange(preorder, 1 + leftLen, preorder.length);
+                int[] inorderRight = Arrays.copyOfRange(inorder, i + 1, inorder.length);
+
+                TreeNode left = buildTree2(preorderLeft, inorderLeft);
+                TreeNode right = buildTree2(preorderRight, inorderRight);
+                root.left = left;
+                root.right = right;
+                break;
+            }
+        }
+        return root;
+    }
 }
