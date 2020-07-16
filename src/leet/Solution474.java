@@ -30,7 +30,7 @@ public class Solution474 {
         String[] b = {"011111", "001", "001"};
         int m = 4;
         int n = 5;
-        System.out.println(findMaxForm2(b, m, n));
+        System.out.println(findMaxForm4(b, m, n));
     }
 
     /**
