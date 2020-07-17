@@ -4,9 +4,10 @@ import java.util.Arrays;
 
 public class Solution322 {
     public static void main(String[] args) {
-        int[] a = {186, 419, 83, 408};
-        int amount = 0;
-        System.out.println(coinChange2(a, amount));
+        int[] a = {1,3,7,11,13};
+        int amount = 20;
+        int[] nums = {1,1,1,1,1};
+        System.out.println(coinChange4(a, amount, nums));
     }
 
     public static int coinChange(int[] coins, int amount) {
@@ -65,18 +66,18 @@ public class Solution322 {
     //带数目限制，多重背包
     public static int coinChange4(int[] coins, int amount, int[] nums) {
         int[] dp = new int[amount+1];
-        Arrays.fill(dp, Integer.MAX_VALUE);
+        Arrays.fill(dp, amount+1);
         dp[0] = 0;
 
-        for (int i = 1; i <= coins.length; i++) {
-            for (int j = amount; j >= coins[i - 1]; j--) {
-                for (int k = 0; k <= Math.min(nums[i - 1], j / coins[i - 1]); k++) {
-                    if (dp[j - k * coins[i - 1]] != -1) {
-                        dp[j] = Math.min(dp[j], dp[j - k * coins[i - 1]] + k);
+        for (int i = 0; i < coins.length; i++) {
+            for (int j = amount; j >= coins[i]; j--) {
+                for (int k = 0; k <= Math.min(nums[i], j / coins[i]); k++) {
+                    if (dp[j - k * coins[i]] != -1) {
+                        dp[j] = Math.min(dp[j], dp[j - k * coins[i]] + k);
                     }
                 }
             }
         }
-        return dp[amount] == Integer.MAX_VALUE?-1:dp[amount];
+        return dp[amount] == amount+1?-1:dp[amount];
     }
 }
