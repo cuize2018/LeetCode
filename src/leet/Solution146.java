@@ -45,31 +45,31 @@ class LRUCache {
     }
 }
 
-class LRUCache2 {
-    Map<Integer, LinkedHashMapNode> map;
-    int maxSize;
-    DoubleLinkedList cache;
-
-    public LRUCache2(int capacity) {
-        map = new HashMap<>();
-        maxSize = capacity;
-        cache = new DoubleLinkedList();
+class LRUCache3 {
+    Map<Integer, CacheNode> map = new HashMap<>();
+    int capacity;
+    DoubleLinkedList cache = new DoubleLinkedList();
+    public LRUCache3(int capacity) {
+        this.capacity = capacity;
     }
 
     public int get(int key) {
-        if (!map.containsKey(key)) return -1;
-        int val = map.get(key).value;
-        put(key, val);
-        return val;
+        if (map.containsKey(key)){
+            CacheNode node = map.get(key);
+            put(key, node.val);
+            return node.val;
+        }
+        return -1;
     }
 
     public void put(int key, int value) {
-        LinkedHashMapNode node = new LinkedHashMapNode(key, value);
-        if (map.containsKey(key)) {
+        CacheNode node = new CacheNode(key, value);
+        if (map.containsKey(key)){
             cache.remove(map.get(key));
-        } else {
-            if (cache.getSize() == maxSize) {
-                LinkedHashMapNode lastNode = cache.removeLast();
+        }
+        else {
+            if (cache.size == capacity){
+                CacheNode lastNode = cache.removeLast();
                 map.remove(lastNode.key);
             }
         }
@@ -79,55 +79,49 @@ class LRUCache2 {
 }
 
 class DoubleLinkedList {
-    private LinkedHashMapNode head;
-    private LinkedHashMapNode tail;
-    private int size;
-
-    public DoubleLinkedList() {
-        head = new LinkedHashMapNode(0, 0);
-        tail = new LinkedHashMapNode(0, 0);
+    CacheNode head = null;
+    CacheNode tail = null;
+    int size = 0;
+    public DoubleLinkedList(){
+        head = new CacheNode(0,0);
+        tail = new CacheNode(0,0);
 
         head.next = tail;
-        tail.prev = head;
-        size = 0;
+        tail.pre = head;
+
     }
 
-    public void addFirst(LinkedHashMapNode node) {
+    public void addFirst(CacheNode node){
         node.next = head.next;
-        node.prev = head;
+        head.next.pre = node;
 
-        head.next.prev = node;
+        node.pre = head;
         head.next = node;
         size++;
     }
 
-    public void remove(LinkedHashMapNode node) {
-        node.prev.next = node.next;
-        node.next.prev = node.prev;
+    public CacheNode removeLast(){
+        if (tail.pre == head)return null;
+        CacheNode node = tail.pre;
+        remove(node);
+        return node;
+    }
+
+    public void remove(CacheNode node) {
+        node.pre.next = node.next;
+        node.next.pre = node.pre;
         size--;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public LinkedHashMapNode removeLast() {
-        if (tail.prev == head) return null;
-        LinkedHashMapNode lastNode = tail.prev;
-        remove(lastNode);
-        return lastNode;
     }
 }
 
+class CacheNode{
+    int key;
+    int val;
+    CacheNode pre = null;
+    CacheNode next = null;
 
-class LinkedHashMapNode {
-    public int key;
-    public int value;
-    public LinkedHashMapNode prev;
-    public LinkedHashMapNode next;
-
-    public LinkedHashMapNode(int k, int v) {
-        key = k;
-        value = v;
+    public CacheNode(int x, int y){
+        key = x;
+        val = y;
     }
 }
