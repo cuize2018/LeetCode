@@ -47,4 +47,19 @@ public class Solution141 {
         }
         return true;
     }
+
+    public static boolean hasCycle3(ListNode head) {
+        if (head == null)return false;
+
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while (fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if (fast == slow)return true;
+        }
+        return false;
+    }
 }
