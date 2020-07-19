@@ -3,9 +3,6 @@ package leet.interview;
 import java.util.*;
 
 public class Solution59_II {
-    public static void main(String[] args) {
-
-    }
 }
 
 class MaxQueue {
@@ -41,38 +38,33 @@ class MaxQueue {
 }
 
 class MaxQueue2 {
-    private Queue<Integer> queue;
-    //单调辅助队列
-    private Deque<Integer> sort_queue;
+    Queue<Integer> queue;
+    Deque<Integer> sortQueue;
 
     public MaxQueue2() {
         queue = new ArrayDeque<>();
-        sort_queue = new ArrayDeque<>();
+        sortQueue = new ArrayDeque<>();
     }
 
     public int max_value() {
-        if (!queue.isEmpty()) {
-            return sort_queue.getFirst();
-        }
-        else return -1;
+        if (queue.isEmpty())return -1;
+        return sortQueue.getFirst();
     }
 
     public void push_back(int value) {
-        while (!sort_queue.isEmpty() && sort_queue.getLast() < value){
-            sort_queue.removeLast();
+        while (!sortQueue.isEmpty() && sortQueue.peekLast() < value){
+            sortQueue.removeLast();
         }
-        sort_queue.addLast(value);
         queue.add(value);
+        sortQueue.addLast(value);
     }
 
     public int pop_front() {
-        if (!queue.isEmpty()){
-            int res = queue.remove();
-            if (res == sort_queue.getFirst()){
-                sort_queue.removeFirst();
-            }
-            return res;
+        if (queue.isEmpty())return -1;
+        int val = queue.remove();
+        if (val == sortQueue.getFirst()){
+            sortQueue.removeFirst();
         }
-        else return -1;
+        return val;
     }
 }
