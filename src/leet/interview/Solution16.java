@@ -11,6 +11,7 @@ public class Solution16 {
      * 如果 n 为偶数，我们可以用公式 (x ^ n) ^ 2 = x ^ {2 * n}来得到 x ^ n = A∗A。
      * 如果 n 为奇数，那么 A * A = x ^ {n - 1}直观上看，我们需要再乘一次 x ，即 x ^ n = A * A * x该方法可以很方便的使用递归实现。
      * 我们称这种方法为 "快速幂"，因为我们只需最多O(logn) 次运算来得到 x ^ n
+     *
      * @param x
      * @param n
      * @return
@@ -30,5 +31,23 @@ public class Solution16 {
 
         if ((n & 1) == 1) return half * half * x;
         return half * half;
+    }
+
+
+    public double myPow2(double x, int n) {
+        if (n < 0) {
+            n = -n;
+            x = 1 / x;
+        }
+        return help(x, n);
+    }
+
+    private double help(double x, int n) {
+        if (n == 0) return 1;
+
+        double v = help(x, n / 2);
+        double t = v * v;
+        if (n % 2 != 0) return t * x;
+        return t;
     }
 }

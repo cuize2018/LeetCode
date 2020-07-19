@@ -2,6 +2,8 @@ package leet;
 
 import com.sun.jmx.snmp.SnmpNull;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
+import org.omg.CORBA.MARSHAL;
+import sun.nio.cs.ext.MacThai;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,31 +16,6 @@ public class Solution152 {
         System.out.println(maxProduct3(nums));
     }
 
-    public static int maxProduct(int[] nums) {
-        int n = nums.length;
-        int last_sum = 0;
-        int this_sum = 0;
-        int max = Integer.MIN_VALUE;
-        if (nums.length == 1) return nums[0];
-
-        for (int i = 0; i < n; i++) {
-            for (int j = i; j < n; j++) {
-                if (j == i) {
-                    last_sum = nums[j];
-                    this_sum = nums[j];
-                } else {
-                    this_sum = last_sum * nums[j];
-                    last_sum = this_sum;
-                }
-
-                if (this_sum > max) {
-                    max = this_sum;
-                }
-            }
-        }
-        return max;
-    }
-
     /**
      * 我们先定义一个数组 dpMax，用 dpMax[i] 表示以第 i 个元素的结尾的子数组，乘积最大的值，也就是这个数组必须包含第 i 个元素。
      * <p>
@@ -46,7 +23,8 @@ public class Solution152 {
      * <p>
      * 当 nums[i] >= 0 并且dpMax[i-1] > 0，dpMax[i] = dpMax[i-1] * nums[i]
      * 当 nums[i] >= 0 并且dpMax[i-1] < 0，此时如果和前边的数累乘的话，会变成负数，所以dpMax[i] = nums[i]
-     * 当 nums[i] < 0，此时如果前边累乘结果是一个很大的负数，和当前负数累乘的话就会变成一个更大的数。所以我们还需要一个数组 dpMin 来记录以第 i 个元素的结尾的子数组，乘积最小的值。
+     * 当 nums[i] < 0，此时如果前边累乘结果是一个很大的负数，和当前负数累乘的话就会变成一个更大的数。
+     * 所以我们还需要一个数组 dpMin 来记录以第 i 个元素的结尾的子数组，乘积最小的值。
      * <p>
      * 当dpMin[i-1] < 0，dpMax[i] = dpMin[i-1] * nums[i]
      * 当dpMin[i-1] >= 0，dpMax[i] = nums[i]
@@ -88,20 +66,21 @@ public class Solution152 {
         return max;
     }
 
-
     public static int maxProduct3(int[] nums) {
+        if (nums.length == 0)return 0;
         int n = nums.length;
         int[] dpMax = new int[n];
-        dpMax[0] = nums[0];
         int[] dpMin = new int[n];
+        dpMax[0] = nums[0];
         dpMin[0] = nums[0];
-        int res = nums[0];
-        for (int i = 1; i < n; i++) {
-            dpMax[i] = Math.max(dpMax[i - 1] * nums[i], Math.max(nums[i], dpMin[i - 1] * nums[i]));
-            dpMin[i] = Math.min(dpMax[i - 1] * nums[i], Math.min(nums[i], dpMin[i - 1] * nums[i]));
 
-            res = Math.max(res, dpMax[i]);
+        int max = dpMax[0];
+        for (int i = 1; i < n; i++) {
+            dpMax[i] = Math.max(dpMax[i-1] * nums[i], Math.max(dpMin[i-1]* nums[i], nums[i]));
+            dpMin[i] = Math.min(dpMax[i-1] * nums[i], Math.min(dpMin[i-1]* nums[i], nums[i]));
+
+            max = Math.max(max, dpMax[i]);
         }
-        return res;
+        return max;
     }
 }

@@ -77,15 +77,13 @@ public class Solution55 {
     }
 
     public static boolean canJump3(int[] nums) {
-        int n = nums.length;
-        if (n == 0) return false;
-        if (n == 1) return true;
-
+        if (nums.length == 0) return true;
         int max = nums[0];
-        for (int i = 1; i < n; i++) {
-            if (i > max) break;
-            max = Math.max(i + nums[i], max);
+
+        for (int j = 1; j < nums.length; j++) {
+            if (j > max) break;
+            max = Math.max(max, j + nums[j]);
         }
-        return max >= n - 1;
+        return max >= nums.length - 1;
     }
 }

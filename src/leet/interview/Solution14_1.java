@@ -34,13 +34,30 @@ public class Solution14_1 {
         for (int i = 2; i <= n; i++) {
             int max = 0;
             for (int j = 1; j <= i / 2; j++) {
-                int a = j * (i - j);
-                int b = dp[j] * dp[i - j];
-                int c = dp[j] * (i - j);
-                int d = j * dp[i - j];
+                int a = j * (i - j); // 2段都不分
+                int b = dp[j] * dp[i - j]; // 2段都再分
+                int c = dp[j] * (i - j); // 只分左边这段
+                int d = j * dp[i - j]; // 只分右边这段
                 max = Math.max(max, Math.max(a, Math.max(b, Math.max(c, d))));
             }
             dp[i] = max;
+        }
+        return dp[n];
+    }
+
+    public static int cuttingRope2(int n) {
+        int[] dp = new int[n+1];
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            if (i % 2 == 0){
+                dp[i] = i/2 * i/2;
+            }
+            else {
+                dp[i] = (i/2)* (i/2+1);
+            }
+            for (int j = i-1; j >= 0 ; j--) {
+                dp[i] = Math.max(dp[i], dp[j] * (i-j));
+            }
         }
         return dp[n];
     }
