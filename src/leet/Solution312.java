@@ -1,8 +1,5 @@
 package leet;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 public class Solution312 {
     public static void main(String[] args) {
         int[] nums = {3, 1, 5, 8};
@@ -37,5 +34,26 @@ public class Solution312 {
             }
         }
         return dp[0][vals.length - 1];
+    }
+
+
+    public static int maxCoins2(int[] nums) {
+        int n = nums.length;
+        if (n == 0) return 0;
+        int[] nums2 = new int[n + 2];
+        System.arraycopy(nums, 0, nums2, 1, n);
+        nums2[0] = nums2[nums2.length-1] = 1;
+
+        int[][] dp = new int[n + 2][n + 2];
+        for (int len = 2; len < n + 2; len++) {
+            for (int i = 0; i < nums2.length - len; i++) {
+                int j = i + len;
+                for (int m = i + 1; m < j; m++) {
+                    int a = nums2[i] * nums2[m] * nums2[j];
+                    dp[i][j] = Math.max(dp[i][j], a + dp[i][m] + dp[m][j]);
+                }
+            }
+        }
+        return dp[0][nums.length-1];
     }
 }
