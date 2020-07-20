@@ -47,7 +47,6 @@ public class Solution60 {
         return res;
     }
 
-
     public static double[] twoSum2(int n) {
         //dp[i][j] ，表示投掷完 i 枚骰子后，点数 j 的出现次数。
         int[] dp = new int[6 * n + 1];
@@ -74,5 +73,20 @@ public class Solution60 {
         return res;
     }
 
-
+    public static double[] twoSum3(int n) {
+        double[][] dp = new double[n+1][n*6+1];
+        for (int j = 1; j <= 6; j++) {
+            dp[1][j] = 1/6D;
+        }
+        for (int i = 2; i <= n; i++) {
+            for (int j = i; j <= i*6; j++) {
+                for (int k = 1; k <= 6; k++) {
+                    if (j - k >= 0) {
+                        dp[i][j] += dp[i - 1][j - k] * 1 / 6D;
+                    }
+                }
+            }
+        }
+        return Arrays.copyOfRange(dp[n], n, dp[n].length);
+    }
 }
