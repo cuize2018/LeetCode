@@ -1,12 +1,14 @@
 package leet.interview;
 
+import leet.ListNode;
+
 import java.util.*;
 
 public class Solution57_II {
 
     public static void main(String[] args) {
-        int target = 94527;
-        int[][] continuousSequence = findContinuousSequence3(target);
+        int target = 9;
+        int[][] continuousSequence = findContinuousSequence4(target);
         for (int[] temp : continuousSequence) {
             System.out.println(Arrays.toString(temp));
         }
@@ -95,13 +97,14 @@ public class Solution57_II {
 
     /**
      * 求根法
-     *  由于连续的正整数数列是一个相当标准的等差数列，我们可以考虑一下把窗口内的数组用等差数列的求和方式进行求和。根据求和公式，
-     *  x^2−x−y^2−y+2t=0
-     *  --->
-     *  x = sqrt(y^2+y-2t+1/4) + 1/2
+     * 由于连续的正整数数列是一个相当标准的等差数列，我们可以考虑一下把窗口内的数组用等差数列的求和方式进行求和。根据求和公式，
+     * x^2−x−y^2−y+2t=0
+     * --->
+     * x = sqrt(y^2+y-2t+1/4) + 1/2
+     * <p>
+     * 那么也就是说，根据x的公式，由于t是题目给定的，我们只要不断地枚举y就能求出相应的x来，
+     * 只要把不符合条件的x，如复数，非整数等筛选掉，即可得到正确的x，由此形成的范围[x,y]就是我们要找的答案
      *
-     *  那么也就是说，根据x的公式，由于t是题目给定的，我们只要不断地枚举y就能求出相应的x来，
-     *  只要把不符合条件的x，如复数，非整数等筛选掉，即可得到正确的x，由此形成的范围[x,y]就是我们要找的答案
      * @param target
      * @return
      */
@@ -112,10 +115,10 @@ public class Solution57_II {
             double sqrt = Math.sqrt(y * y + y - 2 * target + 0.25);
             double x = sqrt + 0.5;
             //判断x是否为整数
-            if (x % 1 == 0){
-                int[] temp = new int[(int)(y-x+1)];
+            if (x % 1 == 0) {
+                int[] temp = new int[(int) (y - x + 1)];
                 int k = 0;
-                for (int i = (int)x;i<=y;i++){
+                for (int i = (int) x; i <= y; i++) {
                     temp[k] = i;
                     k++;
                 }
@@ -129,4 +132,37 @@ public class Solution57_II {
         return res;
     }
 
+    public static int[][] findContinuousSequence4(int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        Deque<Integer> one = new ArrayDeque<>();
+
+        int i = 1;
+        int j = 2;
+        int sum = i;
+        one.addLast(i);
+
+        while (i < j && j <= target - 1) {
+            if (sum == target) {
+                res.add(new ArrayList<>(one));
+                i++;
+                sum -= one.pollFirst();
+            } else if (sum < target) {
+                sum += j;
+                one.offerLast(j);
+                j++;
+            } else {
+                sum -= one.pollFirst();
+                i++;
+            }
+        }
+        int[][] ans = new int[res.size()][];
+        for (int k = 0; k < ans.length; k++) {
+            ans[k] = new int[res.get(k).size()];
+            for (int l = 0; l < ans[k].length; l++) {
+                ans[k][l] = res.get(k).get(l);
+            }
+        }
+        return ans;
+
+    }
 }
