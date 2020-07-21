@@ -7,7 +7,7 @@ public class Solution347 {
         int[] a = {1, 1, 1, 2, 2, 3};
         int k = 2;
         Solution347 solution347 = new Solution347();
-        System.out.println(topKFrequent3(a, k));
+        System.out.println(Arrays.toString(solution347.topKFrequent2(a, k)));
     }
 
     /**
@@ -79,7 +79,7 @@ public class Solution347 {
 
     private void quickSearch(List<Integer> keys, int left, int right, int k) {
         int m = parathion(keys, left, right);
-        if (m == k - 1) {
+        if (m == k) {
             return;
         }
 
@@ -91,6 +91,7 @@ public class Solution347 {
     }
 
     private int parathion(List<Integer> keys, int low, int high) {
+        if (low >= high)return low;
         int left = low;
         int right = high + 1;
         int v = map.get(keys.get(low));
