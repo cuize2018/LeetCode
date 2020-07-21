@@ -4,11 +4,11 @@ import java.util.Arrays;
 
 public class Solution17_14 {
     public static void main(String[] args) {
-        int[] arr = {1, 3, 5, 7, 2, 4, 6, 8};
+        int[] arr = {4,9,8,7,6,5,1};
 //        int[] arr = {1,2,3};
         int k = 4;
 
-        int[] res = smallestK(arr, k);
+        int[] res = smallestK(arr, 7);
         System.out.println(Arrays.toString(res));
     }
 
@@ -33,6 +33,7 @@ public class Solution17_14 {
     }
 
     private static int partition(int[] arr, int low, int high) {
+        if (low >= high)return low;
         int left = low;
         int right = high + 1;
         int v = arr[low];
