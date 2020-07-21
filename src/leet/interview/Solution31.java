@@ -4,27 +4,29 @@ import java.util.Stack;
 
 public class Solution31 {
     public static void main(String[] args) {
+        int[] pushed = {1,2,3,4,5};
+        int[] popped = {4,5,3,2,1};
 
+        System.out.println(validateStackSequences(pushed, popped));
     }
 
-    public boolean validateStackSequences(int[] pushed, int[] popped) {
+    public static boolean validateStackSequences(int[] pushed, int[] popped) {
         Stack<Integer> stack = new Stack<>();
         int i = 0;
         int j = 0;
 
         while (i < pushed.length && j <popped.length) {
-            while (stack.isEmpty() || stack.peek() != popped[j]) {
+            while (i < pushed.length && (stack.isEmpty() || stack.peek() != popped[j])) {
                 stack.push(pushed[i]);
                 i++;
             }
 
-            while (stack.peek() == popped[j]) {
+            while (!stack.isEmpty() && stack.peek() == popped[j]) {
                 stack.pop();
                 j++;
             }
         }
 
-        if (i == pushed.length && j == popped.length)return true;
-        return false;
+        return i == pushed.length && j == popped.length;
     }
 }
