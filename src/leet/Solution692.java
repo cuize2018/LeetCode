@@ -37,15 +37,15 @@ public class Solution692 {
             temp[i++] = entry.getKey();
         }
 
-        quickSort(temp, 0, temp.length-1, temp.length - k);
-        Integer v = map.get(temp[temp.length - k]);
-        int j = temp.length - k - 1;
-        while (j >= 0 && map.get(temp[j]).equals(v)){
-            j--;
+        quickSort(temp, 0, temp.length-1, k);
+        Integer v = map.get(temp[k - 1]);
+        int j = k;
+        while (j < temp.length && map.get(temp[j]).equals(v)){
+            j++;
         }
 
-        for (int m = temp.length-1; m >= j+1; m--) {
-            res.add(temp[m]);
+        for (int l = 0; l < j; l++) {
+            res.add(temp[l]);
         }
         res.sort((x, y) -> {
             if (map.get(x) < map.get(y))return 1;
@@ -60,7 +60,7 @@ public class Solution692 {
 
     private void quickSort(String[] temp, int low, int high, int k) {
         int m = paration(temp, low, high);
-        if (m == k){
+        if (m == k - 1){
             return;
         }
 
@@ -73,16 +73,15 @@ public class Solution692 {
     }
 
     private int paration(String[] temp, int low, int high) {
-        if (low == high)return high;
-
         int i = low;
         int j = high+1;
         String str = temp[low];
+        int v = map.get(str);
         while (true){
-            while (compare(temp[++i], str) < 0){
+            while (map.get(temp[++i]) > v){
                 if (i == high)break;
             }
-            while (compare(temp[--j], str) > 0){
+            while (map.get(temp[--j]) < v){
                 if (j == low)break;
             }
             if (i >= j)break;
@@ -90,14 +89,6 @@ public class Solution692 {
         }
         swap(temp, low, j);
         return j;
-    }
-
-    private int compare(String x, String y){
-        if (map.get(x) < map.get(y))return -1;
-        else if (map.get(x) > map.get(y))return 1;
-        else {
-            return x.compareTo(y);
-        }
     }
 
     private void swap(String[] temp, int i, int j) {
