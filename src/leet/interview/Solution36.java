@@ -1,27 +1,31 @@
 package leet.interview;
 
+import sun.font.TextRecord;
+import sun.security.util.DerOutputStream;
+
+import java.util.Deque;
+import java.util.LinkedList;
+
 public class Solution36 {
     Node2 head;
     Node2 pre;
 
     public static void main(String[] args) {
-//        Node2 root = new Node2(4);root.left = new Node2(2);root.right = new Node2(5);
-//        Node2 copy = root;
-//        root = root.left;
-//        root.left = new Node2(1);root.right = new Node2(3);
-
-        Node2 root = new Node2(-1);root.right = new Node2(1);
-        Node2 mov = root;
-        mov = mov.right;
-        mov.right = new Node2(9);
+        Node2 root = new Node2(4);
+        root.left = new Node2(2);
+        root.right = new Node2(5);
+        Node2 copy = root;
+        root = root.left;
+        root.left = new Node2(1);
+        root.right = new Node2(3);
 
         Solution36 solution36 = new Solution36();
-        Node2 node2 = solution36.treeToDoublyList(root);
+        Node2 node2 = solution36.treeToDoublyList2(root);
         int a = 0;
     }
 
     public Node2 treeToDoublyList(Node2 root) {
-        if (root == null)return null;
+        if (root == null) return null;
         dfs(root);
         head.left = pre;
         pre.right = head;
@@ -39,19 +43,67 @@ public class Solution36 {
      *
      * @param root
      */
-    private void dfs(Node2 root){
-        if (root == null)return;
+    private void dfs(Node2 root) {
+        if (root == null) return;
 
         dfs(root.left);
 
-        if (pre != null){
+        if (pre != null) {
             pre.right = root;
-        }
-        else head = root;
+        } else head = root;
         root.left = pre;
         pre = root;
 
         dfs(root.right);
+    }
+
+    public Node2 treeToDoublyList2(Node2 root) {
+        if (root == null) return null;
+        Deque<Node2> stack = new LinkedList<>();
+        Node2 curr = root;
+        Node2 preNode = null;
+        Node2 head = null;
+
+        while (curr != null || !stack.isEmpty()) {
+            while (curr != null) {
+                stack.addLast(curr);
+                curr = curr.left;
+            }
+            curr = stack.removeLast();
+            curr.left = preNode;
+            if (preNode != null) {
+                preNode.right = curr;
+            } else {
+                head = curr;
+            }
+            preNode = curr;
+            curr = curr.right;
+        }
+        preNode.right = head;
+        head.left = preNode;
+        return head;
+    }
+
+    public Node2 treeToDoublyList3(Node2 root) {
+        if (root == null) return null;
+        inOrder(root);
+        head.left = pre;
+        pre.right = head;
+        return head;
+    }
+
+    private void inOrder(Node2 root) {
+        if (root == null) return;
+
+        inOrder(root.left);
+        root.left = pre;
+        if (pre == null) {
+            head = root;
+        } else {
+            pre.right = root;
+        }
+        pre = root;
+        inOrder(root.right);
     }
 }
 
@@ -60,13 +112,14 @@ class Node2 {
     public Node2 left;
     public Node2 right;
 
-    public Node2() {}
+    public Node2() {
+    }
 
     public Node2(int _val) {
         val = _val;
     }
 
-    public Node2(int _val,Node2 _left,Node2 _right) {
+    public Node2(int _val, Node2 _left, Node2 _right) {
         val = _val;
         left = _left;
         right = _right;
