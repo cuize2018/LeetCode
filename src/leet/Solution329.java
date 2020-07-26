@@ -17,7 +17,8 @@ public class Solution329 {
                         {2, 2, 1}
                 };
         int[][] nums3 = {{1, 2}};
-        System.out.println(longestIncreasingPath(nums3));
+        Solution329 solution329 = new Solution329();
+        System.out.println(solution329.longestIncreasingPath2(nums2));
     }
 
     public static int longestIncreasingPath(int[][] matrix) {
@@ -92,5 +93,36 @@ public class Solution329 {
         }
 
         return matrix[x][y];
+    }
+
+    int[][] dirs = new int[][]{{1,0}, {-1,0}, {0,1},{0,-1}};
+    public int longestIncreasingPath2(int[][] matrix) {
+        int max = 0;
+        int rows = matrix.length;
+        if (rows == 0)return 0;
+        int cols = matrix[0].length;
+        int[][] mem = new int[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                max = Math.max(max, dfs(matrix, i,j, mem));
+            }
+        }
+        return max;
+    }
+
+    private int dfs(int[][] matrix, int i, int j, int[][] mem) {
+        if (mem[i][j] != 0){
+            return mem[i][j];
+        }
+
+        mem[i][j]++;
+        for (int[] dir : dirs) {
+            int x = i + dir[0];
+            int y = j + dir[1];
+            if (x>=0 && x < matrix.length && y >= 0 && y < matrix[0].length && matrix[x][y] > matrix[i][j]){
+                mem[i][j] = Math.max(mem[i][j], dfs(matrix, x,y,mem)+1);
+            }
+        }
+        return mem[i][j];
     }
 }
