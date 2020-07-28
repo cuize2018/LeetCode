@@ -8,16 +8,6 @@ public class Solution3 {
 
     }
 
-    public static int findRepeatNumber(int[] nums) {
-        int[] dict = new int[nums.length];
-
-        for (int i = 0; i < nums.length; i++) {
-            dict[nums[i]]++;
-            if (dict[nums[i]] > 1)return nums[i];
-        }
-        return -1;
-    }
-
     /**
      * 方法3: 鸽巢原理，因为出现的元素值 < nums.size();
      * 所以我们可以将见到的元素放到索引的位置，如果交换时，发现索引处已存在该元素，则重复
@@ -25,7 +15,7 @@ public class Solution3 {
      * @param nums
      * @return
      */
-    public static int findRepeatNumber2(int[] nums) {
+    public static int findRepeatNumber(int[] nums) {
         for (int i = 0; i < nums.length; i++) {
             while (nums[i] != i){
                 if (nums[nums[i]] == nums[i])return nums[i];
@@ -38,4 +28,21 @@ public class Solution3 {
         return -1;
     }
 
+    public static int findRepeatNumber3(int[] nums){
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] != i){
+                if (nums[nums[i]] == nums[i]){
+                    return nums[i];
+                }
+                swap(nums, i, nums[i]);
+            }
+        }
+        return -1;
+    }
+
+    private static void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
 }
