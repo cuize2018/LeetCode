@@ -24,64 +24,26 @@ import java.util.List;
 public class Solution9 {
     public static void main(String[] args) {
         int num = 1000000001;
-        System.out.println(isPalindrome2(num));
+        System.out.println(isPalindrome(num));
     }
 
-    public static boolean isPalindrome(int x) {
-        String str = Integer.toString(x);
-        for (int i = 0; i < str.length() / 2; i++) {
-            if (str.charAt(i) != str.charAt(str.length() - 1 - i)) {
-                return false;
-            }
-        }
-        return true;
-
-    }
-
-    /**
-     * isPalindromeWithoutString,不使用字符串
-     *
-     * @param x 输入整数
-     * @return 布尔值判断是否是回文数
-     */
-    public static boolean isPalindromeWithoutString(int x) {
-        List<Integer> list = new ArrayList<>();
-
-        int val = x;
-        if (val < 0) return false;
-        while (val != 0) {
-            list.add(val % 10);
-            val = val / 10;
-        }
-        list.add(val);
-
-        for (int i = 0; i < list.size() / 2; i++) {
-            if (!list.get(i).equals(list.get(list.size() - 1 - i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static boolean isPalindrome2(int x) {
+    public static boolean isPalindrome(int x){
         if (x < 0)return false;
-        if (x == 0)return  true;
-        long m = 10;
-        long k = 0;
-        long newNum = 0;
-        while (x % m != x) {
-            m *= 10;
-        }
-        m = m / 10;
+        if (x < 10)return true;
 
-        long temp = x;
-        while (temp != 0) {
-            long a = temp / m;
-            newNum += a * Math.pow(10, k++);
-
-            temp = temp % m;
-            m = m / 10;
+        int div = 1;
+        while (x / div >= 10){
+            div *= 10;
         }
-        return (newNum ^ x) == 0;
+
+        while (x > 0){
+            int left = x /div;
+            int right = x % 10;
+            if (left != right)return false;
+
+            x = (x % div)/10;
+            div = div / 100;
+        }
+        return true;
     }
 }
