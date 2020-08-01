@@ -6,16 +6,12 @@ import java.util.PriorityQueue;
 
 public class Solution40 {
     public static void main(String[] args) {
-        int[] arr = {0, 1, 2, 1};
-        int k = 1;
-        System.out.println(Arrays.toString(getLeastNumbers2(arr, k)));
+        int[] arr = {0,0,1,3,4,5,0,7,6,7};
+        int k = 9;
+//        System.out.println(Arrays.toString(getLeastNumbers3(arr, k)));
+        swap(arr, 1, 2);
+        System.out.println(Arrays.toString(arr));
     }
-
-    public static int[] getLeastNumbers(int[] arr, int k) {
-        Arrays.sort(arr);
-        return Arrays.copyOfRange(arr, 0, k);
-    }
-
     /**
      * 使用一个大小为k的大顶堆，每次当元素个数大于k时排出最大的元素，则最终剩下的就是最小的k个元素
      *
@@ -23,7 +19,7 @@ public class Solution40 {
      * @param k
      * @return
      */
-    public static int[] getLeastNumbers2(int[] arr, int k) {
+    public static int[] getLeastNumbers(int[] arr, int k) {
         if (k == 0) return new int[0];
 
         PriorityQueue<Integer> heap = new PriorityQueue<>(new Comparator<Integer>() {
@@ -48,63 +44,48 @@ public class Solution40 {
         return out;
     }
 
-    public static int[] getLeastNumbers3(int[] arr, int k) {
-        if (k == 0) return new int[0];
-        else if (arr.length <= k) {
-            return arr;
-        }
+    public static int[] getLeastNumbers3(int[] arr, int k){
+        if (arr.length < k)return arr;
 
-        //原地不断划分数组
-        quickSearch(arr, 0, arr.length - 1, k);
+        quickSort(arr, k, 0, arr.length-1);
         return Arrays.copyOfRange(arr, 0, k);
     }
 
-    private static void quickSearch(int[] arr, int low, int high, int k) {
-        //第一次划分操作
-        int m = partition(arr, low, high);
-        // 此时数组前 m 个数，就是最小的 m 个数
-        if (m == k) {
-            //此时数组前m个数就是最小的k个数
-            return;
-        } else if (k < m) {
-            //此时前k个最小的数被包含在了最小的前m个数中，在左侧数组中寻找前k个数
-            quickSearch(arr, low, m - 1,k);
-        } else {
-            //此时前m个数既是前k个最小数中的前m个，在右侧数组寻找前k-m个数
-            quickSearch(arr, m + 1, high,k);
+    private static void quickSort(int[] arr, int k, int low, int high) {
+        if (low >= high)return;
+        int m = partition(arr,low,high);
+        if (m == k)return;
+
+        if (m < k){
+            quickSort(arr, k, m+1, high);
+        }
+        else {
+            quickSort(arr, k, low, m - 1);
         }
     }
 
     private static int partition(int[] arr, int low, int high) {
-        int left = low;
-        int right = high +1;
+        int i = low;
+        int j = high + 1;
         int v = arr[low];
-
         while (true){
-            while (arr[++left] < v){
-                if (left == high){
-                    break;
-                }
+            while (arr[++i] < v){
+                if (i == high)break;
             }
-
-            while (arr[--right] > v){
-                if (right == low){
-                    break;
-                }
+            while (arr[--j] > v){
+                if (j == low)break;
             }
-
-            if (left >= right)break;
-
-            swap(arr, left, right);
+            if (i >= j)break;
+            swap(arr, i, j);
         }
-        swap(arr, low, right);
-        // arr[lo .. j-1] <= arr[j] <= arr[j+1 .. hi]
-        return right;
+        swap(arr, low, j);
+        return j;
     }
 
-    private static void swap(int[] arr, int left, int right) {
-        int temp = arr[left];
-        arr[left] = arr[right];
-        arr[right] = temp;
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
+
 }
