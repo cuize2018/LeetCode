@@ -9,7 +9,7 @@ public class Solution452 {
         int[][] e = {{1,2}, {2,3}, {3,4}, {4,5}};
         int[][] c = {{2,3}, {2,3}};
         int[][] d = {{7,15},{6,14},{8,12},{3,4},{4,13},{6,14},{9,11},{6,12},{4,13}};
-        System.out.println(findMinArrowShots2(e));
+        System.out.println(findMinArrowShots(e));
     }
 
     /**
@@ -51,4 +51,29 @@ public class Solution452 {
 
         return arrows;
     }
+
+    /**
+     * 先进行转化，变为按照区间结束点进行从小到大排序，得到排序后数组。
+     * 从数组的第二个元素开始遍历：
+     * 若起始点小于等于上个区间的结束点，则说明重叠，共用一支箭即可；
+     * 若起始点大于上个区间的结束点，则说明不重叠，需要另外一支箭来解决。
+     * @param points
+     * @return
+     */
+    public static int findMinArrowShots(int[][] points) {
+        if (points.length == 0)return 0;
+
+        Arrays.sort(points, Comparator.comparingInt(o -> o[1]));
+        int res = 1;
+        int end = points[0][1];
+        for (int i = 1; i < points.length; i++) {
+            if (points[i][0] > end){
+                res++;
+                end = points[i][1];
+            }
+        }
+        return res;
+
+    }
+
 }
