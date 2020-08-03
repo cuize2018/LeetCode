@@ -1,27 +1,18 @@
 package leet;
 
 public class Solution114 {
-    private TreeNode curr;
-    public static void main(String[] args){
-        TreeNode root = new TreeNode(1);root.left = new TreeNode(2);root.right = new TreeNode(5);
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(5);
         TreeNode rootCopy = root;
         root = root.left;
 
-        root.left = new TreeNode(3);root.right = new TreeNode(4);
-        root = rootCopy;root = root.right;
+        root.left = new TreeNode(3);
+        root.right = new TreeNode(4);
+        root = rootCopy;
+        root = root.right;
         root.right = new TreeNode(6);
-
-//        TreeNode root = new TreeNode(1);  TreeNode rootCopy = root;
-//        root.left = new TreeNode(2);
-//        root = root.left;
-//        root.left = new TreeNode(3);
-
-//        TreeNode root = new TreeNode(2);root.left = new TreeNode(1);root.right = new TreeNode(4);
-//        TreeNode rootCopy = root;
-//        root = root.right;
-//
-//        root.left = new TreeNode(3);
-
 
         Solution114 s = new Solution114();
 
@@ -30,29 +21,46 @@ public class Solution114 {
 
     }
 
-    public  void flatten(TreeNode root) {
-        curr = root;
-        boolean flag = false;
-        if (curr == null)return;
-        if (curr.left == null && curr.right == null){
+    public void flatten(TreeNode root) {
+        if (root == null) return;
+
+        while (root != null) {
+            if (root.left != null) {
+                TreeNode mov = root.left;
+                while (mov.right != null) {
+                    mov = mov.right;
+                }
+
+                TreeNode r = root.right;
+                root.right = root.left;
+                root.left = null;
+                mov.right = r;
+
+            }
+            root = root.right;
+        }
+    }
+
+    public void flatten2(TreeNode root) {
+        if (root == null) return;
+
+        flatten2(root.left);
+        flatten2(root.right);
+
+        if (root.left == null) {
             return;
         }
-        TreeNode rightNode = curr.right;
-        if (curr.left != null) {
-            flag = true;
-            curr.right = curr.left;
-            curr.left = null;
+
+        TreeNode mov = root.left;
+        while (mov.right != null) {
+            mov = mov.right;
         }
 
-        curr = curr.right;
-        flatten(curr);
+        TreeNode r = root.right;
 
-        if (flag) {
-            if (rightNode != null) {
-                curr.right = rightNode;
-                curr = curr.right;
-                flatten(curr);
-            }
-        }
+        root.right = root.left;
+        root.left = null;
+
+        mov.right = r;
     }
 }
