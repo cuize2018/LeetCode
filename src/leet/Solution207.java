@@ -1,9 +1,6 @@
 package leet;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Solution207 {
     public static void main(String[] args) {
@@ -68,6 +65,42 @@ public class Solution207 {
             }
         }
 
+        return numCourses == 0;
+    }
+
+
+    public static boolean canFinish2(int numCourses, int[][] prerequisites) {
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        Queue<Integer> queue = new LinkedList<>();
+        int[] inDegree = new int[numCourses];
+
+        for (int[] prerequisite : prerequisites) {
+            int out = prerequisite[1];
+            int in = prerequisite[0];
+
+            List<Integer> neighbors = graph.getOrDefault(out, new ArrayList<>());
+            neighbors.add(in);
+            graph.put(out, neighbors);
+            inDegree[in]++;
+        }
+
+        for (int i = 0; i < inDegree.length; i++) {
+            if (inDegree[i] == 0){
+                queue.add(i);
+            }
+        }
+
+        while (!queue.isEmpty()){
+            numCourses--;
+            int node = queue.poll();
+            List<Integer> neighbors = graph.getOrDefault(node, new ArrayList<>());
+            for (int neighbor : neighbors) {
+                inDegree[neighbor]--;
+                if (inDegree[neighbor] == 0){
+                    queue.add(neighbor);
+                }
+            }
+        }
         return numCourses == 0;
     }
 }
