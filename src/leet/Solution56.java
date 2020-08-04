@@ -24,7 +24,7 @@ public class Solution56 {
         int[][] d = {{2, 3}, {5, 5}, {2, 2}, {3, 4}, {3, 4}};
         int[][] e = {{0, 2}, {2, 3}, {4, 4}, {0, 1}, {5, 7}, {4, 5}, {0, 0}};
         int[][] f = {{0, 0}, {1, 2}, {5, 5}, {2, 4}, {3, 3}, {5, 6}, {5, 6}, {4, 6}, {0, 0}, {1, 2}, {0, 2}, {4, 5}};
-        int[][] out = merge(a);
+        int[][] out = merge2(c);
 
         for (int i = 0; i < out.length; i++) {
             System.out.println(Arrays.toString(out[i]));
@@ -54,5 +54,38 @@ public class Solution56 {
         }
         return res;
 
+    }
+
+    public static int[][] merge2(int[][] intervals) {
+        int n = intervals.length;
+        if (n == 0)return intervals;
+        Arrays.sort(intervals, (o1, o2) -> Integer.compare(o1[0], o2[0]));
+
+        int start = intervals[0][0];
+        int end = intervals[0][1];
+        List<Integer> left = new ArrayList<>();
+        List<Integer> right = new ArrayList<>();
+
+        for (int i = 1; i < n; i++) {
+            if (intervals[i][0] > end){
+                left.add(start);
+                right.add(end);
+
+                start = intervals[i][0];
+                end = intervals[i][1];
+            }
+            else {
+                end = Math.max(end, intervals[i][1]);
+            }
+        }
+        left.add(start);
+        right.add(end);
+
+        int[][] res = new int[left.size()][2];
+        for (int i = 0; i < res.length; i++) {
+            res[i][0] = left.get(i);
+            res[i][1] = right.get(i);
+        }
+        return res;
     }
 }
