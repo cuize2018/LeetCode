@@ -1,8 +1,6 @@
 package leet;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Solution337 {
@@ -55,12 +53,12 @@ public class Solution337 {
         return new int[]{not_rob, rob};
     }
 
-
     public int rob3(TreeNode root) {
         if (root == null) return 0;
-        if (memo.containsKey(root)) return memo.get(root);
+        if (memo.containsKey(root)){
+            return memo.get(root);
+        }
 
-        int val = root.val;
         int left = 0;
         int right = 0;
         if (root.left != null) {
@@ -69,13 +67,12 @@ public class Solution337 {
         if (root.right != null) {
             right = rob3(root.right.left) + rob3(root.right.right);
         }
-
-        int robRoot = val + left + right;
+        int robRoot = root.val + left + right;
         int notRobRoot = rob3(root.left) + rob3(root.right);
 
-        int res = Math.max(robRoot, notRobRoot);
-        memo.put(root, res);
-        return res;
+        int v = Math.max(robRoot, notRobRoot);
+        memo.put(root, v);
+        return v;
     }
 
 
