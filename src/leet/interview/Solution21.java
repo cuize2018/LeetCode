@@ -20,12 +20,13 @@ public class Solution21 {
 
     /**
      * 快排的思路
+     *
      * @param nums
      * @return
      */
     public static int[] exchange2(int[] nums) {
         int left = 0;
-        int right = nums.length-1;
+        int right = nums.length - 1;
 
         while (left < right) {
             while (left < right && nums[left] % 2 == 1) {
@@ -43,4 +44,26 @@ public class Solution21 {
         return nums;
     }
 
+    public static int[] exchange3(int[] nums) {
+        if (nums.length <= 1) return nums;
+        int i = 0;
+        int j = nums.length;
+
+        while (true) {
+            while (nums[++i] % 2 == 1) {
+                if (i == nums.length - 1) break;
+            }
+            while (nums[--j] % 2 == 0) {
+                if (j == 0) break;
+            }
+            if (i >= j) break;
+            int temp = nums[i];
+            nums[i] = nums[j];
+            nums[j] = temp;
+        }
+        int temp = nums[0];
+        nums[0] = nums[j];
+        nums[j] = temp;
+        return nums;
+    }
 }
