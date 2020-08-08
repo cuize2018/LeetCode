@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Solution99 {
-    //list存储先序遍历的节点值
+    //list存储中序遍历的节点值
     List<TreeNode> list = new ArrayList<>();
 
     public static void main(String[] args) {
