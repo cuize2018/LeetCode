@@ -7,7 +7,7 @@ public class Solution300 {
 //        int[] a = {10,9,2,5,3,7,101,18};
 //        int[] a = {1,3,6,7,9,4,10,5,6};
         int[] a = {4, 10, 4, 3, 8, 9};
-        System.out.println(lengthOfLIS4(a));
+        System.out.println(lengthOfLIS3(a));
     }
 
     public static int lengthOfLIS(int[] nums) {
@@ -83,49 +83,19 @@ public class Solution300 {
      * @return
      */
     public static int lengthOfLIS3(int[] nums) {
+        if (nums.length == 0) return 0;
         int[] dp = new int[nums.length];
-        if (nums.length > 0) dp[0] = 1;
-
-        for (int i = 1; i < dp.length; i++) {
-            int max_dpj = 0;
-            for (int j = 0; j < i; j++) {
-                if (nums[i] > nums[j]) {
-                    max_dpj = Math.max(max_dpj, dp[j]);
-                }
-            }
-            dp[i] = max_dpj + 1;
-        }
-
-        int out = 0;
-        for (int dpi : dp) {
-            out = Math.max(out, dpi);
-        }
-        return out;
-
-    }
-
-
-    public static int lengthOfLIS4(int[] nums) {
-        int n = nums.length;
-        if (n == 0) return 0;
-        //dp[i]代表以第i个元素结尾的最长子序列长度
-        int[] dp = new int[n];
-
         dp[0] = 1;
-        int out = dp[0];
-        for (int i = 1; i < n; i++) {
-            int max = 0;
-            //为了找出 dp[i]，我们需要尝试在每个可能的最长上升子序列中附加当前元素（nums[i]）到 小于nums[i]的元素nums[j]后, j<i
-            //对于所有j, 0<=j<i, dp[i] = max(dp[j])+1, 其中nums[i] > nums[j]
+        int max = 1;
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = 1;
             for (int j = i - 1; j >= 0; j--) {
                 if (nums[i] > nums[j]) {
-                    max = Math.max(max, dp[j]);
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
                 }
             }
-            dp[i] = max + 1;
-            out = Math.max(dp[i], out);
+            max = Math.max(max, dp[i]);
         }
-
-        return out;
+        return max;
     }
 }

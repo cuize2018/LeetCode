@@ -1,12 +1,13 @@
 package leet;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Solution350 {
     public static void main(String[] args) {
         int[] a = {4,9,5};
         int[] b = {9,4,9,8,4};
-        System.out.println(Arrays.toString(intersect2(a,b)));
+        System.out.println(Arrays.toString(intersect3(a,b)));
     }
 
     public static int[] intersect(int[] nums1, int[] nums2) {
@@ -32,31 +33,26 @@ public class Solution350 {
         return ans;
     }
 
-    public static int[] intersect2(int[] nums1, int[] nums2) {
-        if (nums1.length == 0 || nums2.length == 0) return new int[0];
+    public static int[] intersect3(int[] nums1, int[] nums2) {
+        if (nums1.length == 0 || nums2.length == 0)return new int[]{};
         Arrays.sort(nums1);
         Arrays.sort(nums2);
-
         int i = 0;
         int j = 0;
-        List<Integer> res = new ArrayList<>();
-        while (i < nums1.length && j <nums2.length){
-            if (nums1[i] < nums2[j]){
-                i++;
-            }
-            else if (nums1[i] > nums2[j]){
-                j++;
-            }
-            else {
-                res.add(nums1[i]);
-                i++;
-                j++;
-            }
-        }
 
+        List<Integer> res = new ArrayList<>();
+        while (i < nums1.length && j < nums2.length){
+            if (nums1[i] == nums2[j]){
+                res.add(nums1[i]);
+                i++;j++;
+                continue;
+            }
+            if (nums1[i] < nums2[j])i++;
+            else j++;
+        }
         int[] ans = new int[res.size()];
-        for (int m = 0; m < ans.length; m++) {
-            ans[m] = res.get(m);
+        for (int k = 0; k < ans.length; k++) {
+            ans[k] = res.get(k);
         }
         return ans;
     }
