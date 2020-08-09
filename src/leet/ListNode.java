@@ -13,7 +13,7 @@ public class ListNode {
             s.append("->");
             t = t.next;
         }
-        s.append(Integer.toString(t.val));
+        s.append("(").append(Integer.toString(t.val)).append(")");
         System.out.println(s);
     }
 }
