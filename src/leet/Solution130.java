@@ -15,88 +15,60 @@ public class Solution130 {
                 {'O', 'O', 'O'},
                 {'O', 'O', 'O'}};
 
-        Solution130 solution130 = new Solution130();
-        solution130.solve(bb);
+        solve(b);
         for (char[] chars : bb) {
             System.out.println(Arrays.toString(chars));
         }
     }
 
-    public void solve(char[][] board) {
+    public static void solve(char[][] board) {
         int rows = board.length;
         if (rows == 0) return;
         int cols = board[0].length;
+        int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 
-        for (int i = 0; i < cols; i++) {
-            if (board[0][i] == 'O') {
-                BFS(board, 0, i);
+        int x = 0;
+        int y = 0;
+        for (int[] dir : dirs) {
+            while (x >= 0 && x < rows && y >= 0 && y < cols) {
+                if (board[x][y] == 'O') {
+                    bfs(board, x, y, dirs);
+                }
+                x += dir[0];
+                y += dir[1];
             }
+            x = Math.max(0, Math.min(x, rows - 1));
+            y = Math.max(0, Math.min(y, cols - 1));
         }
-
-        for (int i = 0; i < cols; i++) {
-            if (board[rows - 1][i] == 'O') {
-                BFS(board, rows - 1, i);
-            }
-        }
-
-        for (int i = 0; i < rows; i++) {
-            if (board[i][0] == 'O') {
-                BFS(board, i, 0);
-            }
-        }
-
-        for (int i = 0; i < rows; i++) {
-            if (board[i][cols - 1] == 'O') {
-                BFS(board, i, cols - 1);
-            }
-        }
-
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (board[i][j] == 'O') {
                     board[i][j] = 'X';
-                } else if (board[i][j] == '#') {
+                }
+                if (board[i][j] == '#') {
                     board[i][j] = 'O';
                 }
             }
         }
-
     }
 
-    private void BFS(char[][] board, int row, int col) {
-        Queue<Pair> queue = new ArrayDeque<>();
-        Pair start = new Pair(row, col);
-
-        queue.add(start);
-        board[row][col] = '#';
+    private static void bfs(char[][] board, int x, int y, int[][] dirs) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(x * 500 + y);
+        board[x][y] = '#';
 
         while (!queue.isEmpty()) {
-            Pair point = queue.remove();
-            int x = point.getX();
-            int y = point.getY();
-
-            if (x > 0 && board[x - 1][y] == 'O') {
-                Pair temp = new Pair(x - 1, y);
-                queue.add(temp);
-                board[x - 1][y] = '#';
-            }
-
-            if (x < board.length - 1 && board[x + 1][y] == 'O') {
-                Pair temp = new Pair(x + 1, y);
-                queue.add(temp);
-                board[x + 1][y] = '#';
-            }
-
-            if (y > 0 && board[x][y - 1] == 'O') {
-                Pair temp = new Pair(x, y - 1);
-                queue.add(temp);
-                board[x][y - 1] = '#';
-            }
-
-            if (y < board[row].length - 1 && board[x][y + 1] == 'O') {
-                Pair temp = new Pair(x, y + 1);
-                queue.add(temp);
-                board[x][y + 1] = '#';
+            Integer node = queue.remove();
+            int r = node / 500;
+            int c = node % 500;
+            for (int[] dir : dirs) {
+                int i = r + dir[0];
+                int j = c + dir[1];
+                int key = i * 500 + j;
+                if (i >= 0 && i < board.length && j >= 0 && j < board[0].length && board[i][j] == 'O') {
+                    queue.add(key);
+                    board[i][j] = '#';
+                }
             }
         }
     }
