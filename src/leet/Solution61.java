@@ -1,5 +1,7 @@
 package leet;
 
+import java.util.List;
+
 /**
  * 给定一个链表，旋转链表，将链表每个节点向右移动 k 个位置，其中 k 是非负数。
  *
@@ -35,31 +37,40 @@ public class Solution61 {
     }
 
     public static ListNode rotateRight(ListNode head, int k) {
-        if (head == null){
-            return null;
-        }
-        ListNode head_copy = head;
-        ListNode mov_t = head;
+        if (head == null || k == 0)return head;
+        ListNode slowPre = null;
+        ListNode slow = head;
+
+        ListNode fastPre = null;
+        ListNode fast = head;
+
         int len = 0;
-        while (mov_t!=null){
+        ListNode mov = head;
+        while (mov != null){
             len++;
-            mov_t=mov_t.next;
-        }
-        int step = k % len;
-
-        for (int i = 0; i < step;i++) {
-            ListNode mov = head_copy;
-            int pre_val = mov.val;
             mov = mov.next;
-
-            while (mov != null) {
-                int tmp_this_val = mov.val;
-                mov.val = pre_val;
-                mov = mov.next;
-                pre_val = tmp_this_val;
-            }
-            head_copy.val = pre_val;
         }
-        return head_copy;
+        k = k % len;
+        if (k == 0)return head;
+
+        int i = 0;
+        while (i < k){
+            fastPre = fast;
+            fast = fast.next;
+            i++;
+        }
+
+        while (fast != null){
+            fastPre = fast;
+            fast = fast.next;
+
+            slowPre = slow;
+            slow = slow.next;
+        }
+
+        slowPre.next = null;
+        fastPre.next = head;
+        head = slow;
+        return head;
     }
 }
