@@ -55,22 +55,29 @@ public class Solution5 {
     }
 
     public static String longestPalindrome2(String s) {
-        String res = "";
-        for (int i = 0; i < s.length(); i++) {
-            String a = expand(s, i, i);//奇数
-            String b = expand(s, i, i + 1);//偶数
-            String temp = a.length() > b.length() ? a : b;
-            if (temp.length() > res.length()) res = temp;
+        int len = s.length();
+        if (len == 0)return "";
+        int start = 0 ;
+        int end = 0;
+        for (int i = 0; i < len; i++) {
+            int a = expand2(s, i, i);
+            int b = expand2(s, i, i+1);
+            int max = Math.max(a,b);
+            if (max > end-start+1){
+                start = i - (max-1)/2;
+                end = i + max/2;
+            }
         }
-        return res;
+        return s.substring(start, end+1);
+
     }
 
-    private static String expand(String s, int left, int right) {
-        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+    private static int expand2(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)){
             left--;
             right++;
         }
-        return s.substring(left + 1, right);
+        return right - left - 1;
     }
 }
 

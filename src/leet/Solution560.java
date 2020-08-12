@@ -66,23 +66,4 @@ public class Solution560 {
         return count;
 
     }
-
-
-    public static int subarraySum4(int[] nums, int k) {
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(0, 1);
-
-        int res = 0;
-        int sumRight = 0;
-
-        for (int i = 0; i < nums.length; i++) {
-            sumRight += nums[i];
-            int sumLeft = sumRight - k;
-            if (map.containsKey(sumLeft)) {
-                res += map.get(sumLeft);
-            }
-            map.put(sumRight, map.getOrDefault(sumRight, 0) + 1);
-        }
-        return res;
-    }
 }
