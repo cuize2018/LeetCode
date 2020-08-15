@@ -45,12 +45,12 @@ public class Solution1062 {
         }
 
         for (int i = 0; i < len; i++) {
-            hash += (nums[i] * Math.pow(base, len - i - 1))%mod;
+            hash += (nums[i] * Math.pow(base, len - i - 1)) % mod;
         }
         seen.add(hash);
 
         for (int i = 1; i <= s.length() - len; i++) {
-            hash = (hash * base - nums[i - 1] * al % mod + mod)%mod;
+            hash = (hash * base - nums[i - 1] * al % mod + mod) % mod;
             hash += nums[i + len - 1] % mod;
             if (seen.contains(hash)) {
                 return i;
@@ -58,5 +58,32 @@ public class Solution1062 {
             seen.add(hash);
         }
         return -1;
+    }
+
+    public static int longestRepeatingSubstring2(String S) {
+        int n = S.length();
+        if (n == 1) return 0;
+        int idx = 0;
+        int res = 0;
+
+        while (idx < n) {
+            int start = idx;
+            int next = start + 1;
+            int len = 0;
+            while (next < n) {
+                if (S.charAt(start) == S.charAt(next)) {
+                    start++;
+                    next++;
+                    len++;
+                    res = Math.max(res, len);
+                } else {
+                    start = idx;
+                    next = next - len + 1;
+                    len = 0;
+                }
+            }
+            idx++;
+        }
+        return res;
     }
 }
