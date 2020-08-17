@@ -12,6 +12,7 @@ public class Solution718 {
     /**
      * dp[i][j]代表以A[i-1]与B[j-1]结尾的公共字串的长度
      * 公共字串必须以A[i-1]，B[j-1]结束
+     *
      * @param A
      * @param B
      * @return
@@ -28,5 +29,24 @@ public class Solution718 {
             }
         }
         return res;
+    }
+
+    public static int findLength2(int[] A, int[] B) {
+        int len1 = A.length;
+        int len2 = B.length;
+        if (len1 == 0 && len2 == 0) return 0;
+        if (len1 == 0 || len2 == 0) return 0;
+
+        int[][] dp = new int[len1 + 1][len2 + 1];
+        int max = 0;
+        for (int i = 1; i <= len1; i++) {
+            for (int j = 1; j <= len2; j++) {
+                if (A[i - 1] == B[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                    max = Math.max(max, dp[i][j]);
+                }
+            }
+        }
+        return max;
     }
 }
