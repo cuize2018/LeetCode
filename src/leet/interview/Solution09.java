@@ -14,34 +14,25 @@ public class Solution09 {
 
     }
 
+    static class CQueue {
+        Stack<Integer> stack1 = new Stack<>();
+        Stack<Integer> stack2 = new Stack<>();
+        public CQueue() {
 
-}
-
-class CQueue {
-    Deque<Integer> stack1;
-    Deque<Integer> stack2;
-
-    public CQueue() {
-        stack1 = new ArrayDeque<>();
-        stack2 = new ArrayDeque<>();
-    }
-
-    public void appendTail(int value) {
-        stack1.addLast(value);
-    }
-
-    public int deleteHead() {
-        if (stack2.isEmpty()){
-            if (stack1.isEmpty())return -1;
-
-            while (stack1.size() > 1){
-                int v = stack1.removeLast();
-                stack2.addLast(v);
-            }
-            return stack1.removeLast();
         }
-        else {
-            return stack2.removeLast();
+
+        public void appendTail(int value) {
+            stack1.push(value);
+        }
+
+        public int deleteHead() {
+            if (stack2.isEmpty()){
+               while (!stack1.isEmpty()){
+                   stack2.push(stack1.pop());
+               }
+            }
+            if (stack2.isEmpty())return -1;
+            return stack2.pop();
         }
     }
 }
