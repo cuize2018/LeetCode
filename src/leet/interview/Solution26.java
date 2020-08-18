@@ -54,5 +54,27 @@ public class Solution26 {
         return A.val == B.val && dfs2(A.left, B.left) && dfs2(A.right, B.right);
     }
 
+    public boolean isSubStructure3(TreeNode A, TreeNode B) {
+        if (A == null || B == null)return false;
+
+        boolean b = helper(A,B);
+        if (b)return true;
+        boolean l = isSubStructure3(A.left, B);
+        if (l)return true;
+        boolean r = isSubStructure3(A.right, B);
+        if (r)return true;
+        return false;
+    }
+
+    private boolean helper(TreeNode left, TreeNode right) {
+        if (right == null)return true;
+        if (left == null)return false;
+
+        if (left.val == right.val){
+            return helper(left.left,right.left) && helper(left.right,right.right);
+        }
+        return false;
+    }
+
 
 }
