@@ -30,4 +30,21 @@ public class Solution647 {
         return count;
     }
 
+    public static int countSubstrings3(String s) {
+        int n = s.length();
+        if (n == 0) return 0;
+        boolean[][] dp = new boolean[n][n];
+        int cnt = 0;
+
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i; j < n; j++) {
+                if (s.charAt(i) == s.charAt(j) && (j - i <= 1 || dp[i + 1][j - 1])) {
+                    dp[i][j] = true;
+                    cnt++;
+                }
+            }
+        }
+        return cnt;
+    }
+
 }
