@@ -1,10 +1,10 @@
 package Learning;
 
 public class BloomFlitter {
-    private final int[] data;
+    private final byte[] data;
 
     public BloomFlitter(int size) {
-        data = new int[size * 2];
+        data = new byte[size * 2];
     }
 
     public void add(int key) {
