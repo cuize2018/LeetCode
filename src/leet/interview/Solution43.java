@@ -59,7 +59,7 @@ public class Solution43 {
     public static int countDigitOne3(int n) {
         if (n == 0) return 0;
         if (n < 10) return 1;
-        
+
         int pow = 1;
         int temp = n;
         while (temp >= 10) {
