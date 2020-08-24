@@ -6,11 +6,9 @@ public class Kmp {
     private final int[] prefixTable;//前缀表，存有长度为i的前缀子串的最长公共前后缀长度
 
     public static void main(String[] args) {
-        String s = "ABABABCABAABABABACBSD";
-        String pattern = "ABABCABAA";
+        String s = "a";
+        String pattern = "a";
         Kmp kmp = new Kmp(s, pattern);
-        kmp.createPrefixTable();
-        kmp.movePrefixTable();
         int i = kmp.kmpSearch();
         System.out.println(i);
     }
@@ -62,12 +60,13 @@ public class Kmp {
         int j = 0;
 
         while (i < text.length()) {
-            if (j == pattern.length() - 1) {
+            if (j == pattern.length()-1 && text.charAt(i) == pattern.charAt(j)) {
                 //返回第一次遇到pattern的下标
                 return i - j;
                 //若还需接着匹配，则执行以下代码
                 //j = prefixTable[j];
             }
+
             if (text.charAt(i) == pattern.charAt(j)) {
                 i++;j++;
             } else {
