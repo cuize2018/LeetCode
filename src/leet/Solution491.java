@@ -3,11 +3,12 @@ package leet;
 import java.util.*;
 
 public class Solution491 {
-    public Set<List<Integer>> out = new HashSet<>();
-    public Stack<Integer> one = new Stack<>();
+    public List<List<Integer>> out = new ArrayList<>();
+    public Stack<Integer> idx = new Stack<>();
+    public Stack<Integer> val = new Stack<>();
 
     public static void main(String[] args) {
-        int[] exp = {4,6,7,7};
+        int[] exp = {4, 6, 7, 7};
         Solution491 sol = new Solution491();
 
         System.out.println(sol.findSubsequences(exp));
@@ -15,40 +16,57 @@ public class Solution491 {
 
     /**
      * 深度优先DFS
+     *
      * @param nums
      * @return
      */
     public List<List<Integer>> findSubsequences(int[] nums) {
-        if (nums.length < 2)return new ArrayList<>(out);
+        int n = nums.length;
+        if (n == 0) return new ArrayList<>();
+        boolean[] visited = new boolean[n];
 
-        for (int i = 0;i<nums.length;i++){
-            one.add(nums[i]);
-            dfs(Arrays.copyOfRange(nums, i+1, nums.length));
-            one.pop();
-        }
+        dfs3(nums, Integer.MIN_VALUE, 0);
         return new ArrayList<>(out);
     }
 
-    public void dfs(int[] nums){
-        if (nums.length == 0)return ;
+    private void dfs2(int[] nums, boolean[] visited) {
+        if (idx.size() >= 2) {
+            out.add(new ArrayList<>(val));
+        }
 
-        if (nums.length == 1){
-            if (nums[0] >= one.peek()){
-                one.push(nums[0]);
-                out.add(new ArrayList<>(one));
-                one.pop();
+        int i = idx.isEmpty() ? 0 : idx.peek() + 1;
+        for (; i < nums.length; i++) {
+            if (!visited[i]) {
+                if (idx.isEmpty() || nums[i] >= nums[idx.peek()]) {
+                    idx.push(i);
+                    val.push(nums[i]);
+                    visited[i] = true;
+
+                    dfs2(nums, visited);
+
+                    visited[i] = false;
+                    val.pop();
+                    idx.pop();
+                }
+            }
+        }
+    }
+
+    private void dfs3(int[] nums, int last, int curr) {
+        if (curr == nums.length) {
+            if (val.size() >= 2) {
+                out.add(new ArrayList<>(val));
             }
             return;
         }
 
-        for (int i = 0;i<nums.length;i++){
-            if (nums[i] >= one.peek()){
-                one.push(nums[i]);
-                if (one.size() >= 2)out.add(new ArrayList<>(one));
-
-                dfs(Arrays.copyOfRange(nums, i+1, nums.length));
-                one.pop();
-            }
+        if (nums[curr] >= last) {
+            val.push(nums[curr]);
+            dfs3(nums, nums[curr], curr + 1);
+            val.pop();
+        }
+        if (nums[curr] != last) {
+            dfs3(nums, last, curr + 1);
         }
     }
 
