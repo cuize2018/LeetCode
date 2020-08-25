@@ -2,7 +2,9 @@ package leet.interview;
 
 public class Solution16 {
     public static void main(String[] args) {
-
+        double x = 2;
+        int n = Integer.MIN_VALUE;
+        System.out.println(myPow3(x, n));
     }
 
     /**
@@ -49,5 +51,20 @@ public class Solution16 {
         double t = v * v;
         if (n % 2 != 0) return t * x;
         return t;
+    }
+
+    public static double myPow3(double x, int n) {
+        long N = n;
+        if (N < 0) {
+            N = -N;
+            x = 1 / x;
+        }
+        double res = 1;
+        while (N != 0) {
+            if (N % 2 != 0) res *= x;
+            x = x * x;
+            N /= 2;
+        }
+        return res;
     }
 }
