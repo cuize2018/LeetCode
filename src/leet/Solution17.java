@@ -1,61 +1,50 @@
 package leet;
 
-import javax.swing.plaf.nimbus.AbstractRegionPainter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-/**
- * 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。
- *
- * 给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
- *
- * 示例:
- * 输入："23"
- * 输出：["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
- */
 public class Solution17 {
+    StringBuilder stringBuilder = new StringBuilder();
+    List<String> res = new ArrayList<>();
 
-
-    public static void main(String[] args){
-        String digits = "238";
-        System.out.println(letterCombinations(digits));
+    public static void main(String[] args) {
+        String digits = "7";
+        System.out.println(new Solution17().letterCombinations2(digits));
     }
 
-    /**
-     * 深度优先
-     * @param digits
-     * @return
-     */
-    public static List<String> letterCombinations(String digits) {
-        HashMap<Integer, String> phone = new HashMap<Integer, String>();
-        phone.put(2,"abc");
-        phone.put(3,"def");
-        phone.put(4,"ghi");
-        phone.put(5,"jkl");
-        phone.put(6,"mno");
-        phone.put(7,"pqrs");
-        phone.put(8,"tuv");
-        phone.put(9,"wxyz");
+    public List<String> letterCombinations2(String digits) {
+        if (digits.length() == 0) return new ArrayList<>();
 
-        List<String> out = new ArrayList<>();
-        if (digits.length() == 0)return out;
-        backTrack(phone,out,"",digits);
-
-        return out;
-    }
-
-    public static void backTrack(HashMap<Integer,String> phone, List<String> out, String conbination, String nextDigit){
-        if (nextDigit.length() == 0){
-            out.add(conbination);
+        Map<Character, char[]> map = new HashMap<>();
+        char c = 'a';
+        for (int i = 2; i <= 9; i++) {
+            int m = (i == 7 || i == 9) ? 4 : 3;
+            char[] t = new char[m];
+            for (int j = 0; j < m; j++) {
+                t[j] = c;
+                c++;
+            }
+            map.put((char) ('0' + i), t);
         }
-        else{
-            String one_digit = nextDigit.substring(0,1);
-            String letters = phone.get(Integer.valueOf(one_digit));
+        char[] chars = digits.toCharArray();
+        dfs(chars, map, 0);
+        return res;
+    }
 
-            for (int i = 0;i<letters.length();i++){
-                String letter = letters.substring(i,i+1);
-                backTrack(phone,out,conbination+letter, nextDigit.substring(1));
+    private void dfs(char[] chars, Map<Character, char[]> map, int idx) {
+        if (stringBuilder.length() == chars.length) {
+            res.add(stringBuilder.toString());
+            return;
+        }
+
+        for (int i = idx; i < chars.length; i++) {
+            char[] neighbors = map.get(chars[i]);
+            for (char neighbor : neighbors) {
+                stringBuilder.append(neighbor);
+                dfs(chars, map, i + 1);
+                stringBuilder.deleteCharAt(stringBuilder.length() - 1);
             }
         }
     }
