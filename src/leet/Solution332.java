@@ -3,11 +3,6 @@ package leet;
 import java.util.*;
 
 public class Solution332 {
-    Stack<String> res = new Stack<>();
-    List<String> ans = new ArrayList<>();
-    Map<String, Integer> visited = new HashMap<>();
-    boolean found = false;
-
     public static void main(String[] args) {
 //        String[][] t = {{"MUC","LHR"},{"JFK","MUC"},{"SFO","SJC"},{"LHR","SFO"}};
         String[][] t = {{"EZE", "AXA"}, {"TIA", "ANU"}, {"ANU", "JFK"}, {"JFK", "ANU"}, {"ANU", "EZE"}, {"TIA", "ANU"}, {"AXA", "TIA"}, {"TIA", "JFK"}, {"ANU", "TIA"}, {"JFK", "TIA"}};
