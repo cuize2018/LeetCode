@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Solution46 {
     List<List<Integer>> res = new ArrayList<>();
-    Deque<Integer> one = new LinkedList<>();
+    Stack<Integer> one = new Stack<>();
 
     public static void main(String[] args) {
         int[] nums = {1, 2, 3};
@@ -14,32 +14,27 @@ public class Solution46 {
     }
 
     public List<List<Integer>> permute(int[] nums) {
-        if (nums.length == 0)return new ArrayList<>();
-        int[] visited = new int[nums.length];
+        int n = nums.length;
+        boolean[] visited = new boolean[n];
 
-        for (int i = 0; i < nums.length; i++) {
-            one.add(nums[i]);
-            visited[i] = 1;
-            dfs2(nums, visited);
-            visited[i] = 0;
-            one.removeLast();
-        }
+        dfs(nums, visited);
         return res;
     }
 
-    private void dfs2(int[] nums, int[] visited) {
-        if (one.size() == nums.length){
+    private void dfs(int[] nums, boolean[] visited) {
+        int n = nums.length;
+        if (one.size() == n){
             res.add(new ArrayList<>(one));
             return;
         }
 
-        for (int i = 0; i < nums.length; i++) {
-            if (visited[i] == 0) {
-                one.add(nums[i]);
-                visited[i] = 1;
-                dfs2(nums, visited);
-                visited[i] = 0;
-                one.removeLast();
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]){
+                one.push(nums[i]);
+                visited[i] = true;
+                dfs(nums, visited);
+                visited[i] = false;
+                one.pop();
             }
         }
     }
