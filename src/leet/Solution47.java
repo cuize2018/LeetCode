@@ -4,70 +4,52 @@ import java.util.*;
 
 /**
  * 给定一个可包含重复数字的序列，返回所有不重复的全排列。
- *
+ * <p>
  * 示例:
- *
+ * <p>
  * 输入: [1,1,2]
  * 输出:
  * [
- *   [1,1,2],
- *   [1,2,1],
- *   [2,1,1]
+ * [1,1,2],
+ * [1,2,1],
+ * [2,1,1]
  * ]
  */
 public class Solution47 {
-    public static void main(String[] args){
-        int[] a = {1,1,2};
-        System.out.println(permuteUnique(a));
+    public static void main(String[] args) {
+        int[] a = {1, 1, 2};
+        System.out.println(new Solution47().permuteUnique(a));
     }
 
-    public static List<List<Integer>> permuteUnique(int[] nums) {
-        List<List<Integer>> out = new ArrayList<>();
-        Stack<Integer> list = new Stack<>();
-        Set<Integer> set = new HashSet<>();
+    List<List<Integer>> res = new ArrayList<>();
+    Stack<Integer> stack = new Stack<>();
 
-        for (int i = 0;i<nums.length;i++){
-            int[] r = new int[nums.length-1];
-            int k = 0;
-            for (int j = 0;j<nums.length;j++){
-                if (j != i){
-                    r[k] = nums[j];
-                    k++;
-                }
-            }
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        if (nums.length == 0) return res;
+        boolean[] visited = new boolean[nums.length];
 
-            list.push(nums[i]);
-            if (!set.contains(nums[i])) {
-                set.add(nums[i]);
-                onePart(r, list, out);
-            }
-            list.clear();
-        }
-        return out;
+        Arrays.sort(nums);
+        dfs(nums, visited, 0);
+        return res;
     }
 
-    private static  void onePart(int[] rest, Stack<Integer> list, List<List<Integer>> out){
-        if (rest.length == 0){
-            List<Integer> t = new ArrayList<>(list);
-            out.add(t);
+    private void dfs(int[] nums, boolean[] visited, int depth) {
+        int n = nums.length;
+        if (depth == n) {
+            res.add(new ArrayList<>(stack));
+            return;
         }
-        Set<Integer> set = new HashSet<>();//针对同一层次的计算，对连续的相同的元素只选取一个进行后续的替换，即可等价于基础全排列。
-        for (int i = 0;i<rest.length;i++){
-            int[] r = new int[rest.length-1];
-            int k = 0;
-            for (int j = 0;j<rest.length;j++){
-                if (j != i){
-                    r[k] = rest[j];
-                    k++;
-                }
-            }
+        for (int i = 0; i < n; i++) {
+            if (visited[i]) continue;
+            if (i > 0 && nums[i] == nums[i - 1] && !visited[i - 1]) continue;
 
-            list.push(rest[i]);
-            if (!set.contains(rest[i])) {
-                set.add(rest[i]);
-                onePart(r, list, out);
-            }
-            list.pop();
+            stack.push(nums[i]);
+            visited[i] = true;
+
+            dfs(nums, visited, depth + 1);
+
+            visited[i] = false;
+            stack.pop();
         }
     }
 }
