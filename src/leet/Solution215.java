@@ -4,8 +4,8 @@ import java.util.PriorityQueue;
 
 public class Solution215 {
     public static void main(String[] args) {
-        int[] a = {3, 2, 1, 5, 6, 4};
-        int k = 3;
+        int[] a = {6,5,4,3,2,1};
+        int k = 6;
         System.out.println(findKthLargest2(a, k));
     }
 
@@ -22,21 +22,23 @@ public class Solution215 {
     }
 
     public static int findKthLargest2(int[] nums, int k) {
-        return quickSort(nums, 0, nums.length - 1, nums.length - k);
+        return quickSort(nums, 0, nums.length - 1, k-1);
     }
 
     private static int quickSort(int[] nums, int low, int high, int k) {
-        if (low == high) return nums[low];
+        if (low == high) {
+            return nums[low];
+        }
         int m = paration(nums, low, high);
 
-        if (k == m) {
+        if (m == k) {
             return nums[m];
         }
 
         if (m > k) {
-            return quickSort(nums, low, m - 1, k);
+            return quickSort(nums, low, m-1 , k);
         } else {
-            return quickSort(nums, m + 1, high, k);
+            return quickSort(nums, m +1, high, k);
         }
     }
 

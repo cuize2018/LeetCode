@@ -1,5 +1,7 @@
 package leet;
 
+import org.w3c.dom.ls.LSException;
+
 import java.util.*;
 
 public class Solution94 {
@@ -57,22 +59,54 @@ public class Solution94 {
     }
 
     public static List<Integer> inorderTraversal3(TreeNode root) {
-        if (root == null)return new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
         List<Integer> res = new ArrayList<>();
-        Deque<TreeNode> stack = new ArrayDeque<>();
-        TreeNode mov = root;
-
-        while (mov != null || !stack.isEmpty()){
-            while (mov != null){
-                stack.push(mov);
-                mov = mov.left;
+        while (root != null || !stack.isEmpty()){
+            while (root != null){
+                stack.push(root);
+                root = root.left;
             }
-            mov = stack.pop();
-            res.add(mov.val);
-            mov = mov.right;
+            root = stack.pop();
+            res.add(root.val);
+            root = root.right;
         }
         return res;
     }
 
+    public static List<Integer> preorderTraversal(TreeNode root) {
+        Stack<TreeNode> stack = new Stack<>();
+        List<Integer> res = new ArrayList<>();
+        stack.push(root);
 
+        while (!stack.isEmpty()){
+            TreeNode node = stack.pop();
+            res.add(node.val);
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+        }
+        return res;
+    }
+
+    public static List<Integer> postOrderTraversal(TreeNode root) {
+        Stack<TreeNode> stack = new Stack<>();
+        LinkedList<Integer> res = new LinkedList<>();
+        stack.push(root);
+
+        while (!stack.isEmpty()){
+            TreeNode node = stack.pop();
+            res.addFirst(node.val);
+
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+        }
+        return res;
+    }
 }
