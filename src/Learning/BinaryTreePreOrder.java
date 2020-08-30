@@ -2,10 +2,7 @@ package Learning;
 
 import leet.TreeNode;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class BinaryTreePreOrder {
     public static void main(String[] args) {
@@ -16,15 +13,16 @@ public class BinaryTreePreOrder {
         if (root == null) return new ArrayList<>();
 
         List<Integer> res = new ArrayList<>();
-        Deque<TreeNode> queue = new LinkedList<>();
-        queue.addLast(root);
+        Stack<TreeNode> stack = new Stack<>();
+        stack.add(root);
 
-        while (!queue.isEmpty()) {
-            TreeNode node = queue.removeFirst();
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
             res.add(node.val);
 
-            if (node.right != null) queue.addFirst(node.right);
-            if (node.left != null) queue.addFirst(node.left);
+            if (node.right != null) stack.push(node.right);
+            if (node.left != null) stack.push(node.left);
+
         }
         return res;
     }
