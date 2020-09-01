@@ -94,4 +94,41 @@ public class Solution148 {
         temp.next = left != null ? left : right;
         return head.next;
     }
+
+    public static ListNode sortList3(ListNode head) {
+        if (head == null || head.next == null) return head;
+
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        ListNode right = slow.next;
+        slow.next = null;
+
+        ListNode first = sortList3(head);
+        ListNode second = sortList3(right);
+
+        return merge2(first, second);
+    }
+
+    private static ListNode merge2(ListNode first, ListNode second) {
+        ListNode head = new ListNode(0);
+        ListNode mov = head;
+        while (first != null && second != null) {
+            if (first.val < second.val) {
+                mov.next = first;
+                first = first.next;
+            } else {
+                mov.next = second;
+                second = second.next;
+            }
+            mov = mov.next;
+        }
+        if (first != null) mov.next = first;
+        if (second != null) mov.next = second;
+        return head.next;
+    }
 }
