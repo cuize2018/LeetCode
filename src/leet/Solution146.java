@@ -45,83 +45,79 @@ class LRUCache {
     }
 }
 
-class LRUCache3 {
-    Map<Integer, CacheNode> map = new HashMap<>();
-    int capacity;
-    DoubleLinkedList cache = new DoubleLinkedList();
-    public LRUCache3(int capacity) {
-        this.capacity = capacity;
+class LRUCache2 {
+    Map<Integer, DoubleNode> map;
+    DoubleList list;
+    int cap;
+
+    public LRUCache2(int capacity) {
+        map = new HashMap<>();
+        list = new DoubleList();
+        cap = capacity;
     }
 
     public int get(int key) {
-        if (map.containsKey(key)){
-            CacheNode node = map.get(key);
-            put(key, node.val);
-            return node.val;
-        }
-        return -1;
+        if (!map.containsKey(key)) return -1;
+
+        DoubleNode node = map.get(key);
+        remove(node);
+        add(node);
+
+        return node.val;
+    }
+
+    private void remove(DoubleNode node) {
+        map.remove(node.key);
+
+        DoubleNode pre = node.pre;
+        DoubleNode next = node.next;
+
+        pre.next = next;
+        next.pre = pre;
+
+        node.next = null;
+        node.pre = null;
+    }
+
+    private void add(DoubleNode node) {
+        map.put(node.key, node);
+
+        DoubleNode tail = list.tail;
+        DoubleNode tailPre = tail.pre;
+
+        tailPre.next = node;
+        node.next = tail;
+
+        node.pre = tailPre;
+        tail.pre = node;
     }
 
     public void put(int key, int value) {
-        CacheNode node = new CacheNode(key, value);
-        if (map.containsKey(key)){
-            cache.remove(map.get(key));
+        DoubleNode node = map.get(key);
+        if (map.containsKey(key)) {
+            remove(node);
         }
-        else {
-            if (cache.size == capacity){
-                CacheNode lastNode = cache.removeLast();
-                map.remove(lastNode.key);
-            }
+        if (map.size() == cap) {
+            remove(list.head.next);
         }
-        cache.addFirst(node);
-        map.put(key, node);
+        DoubleNode newNode = new DoubleNode(key, value);
+        add(newNode);
     }
 }
 
-class DoubleLinkedList {
-    CacheNode head = null;
-    CacheNode tail = null;
-    int size = 0;
-    public DoubleLinkedList(){
-        head = new CacheNode(0,0);
-        tail = new CacheNode(0,0);
+class DoubleList {
+    DoubleNode head;
+    DoubleNode tail;
 
+    public DoubleList() {
+        head = new DoubleNode(0, 0);
+        tail = new DoubleNode(0, 0);
         head.next = tail;
         tail.pre = head;
-
-    }
-
-    public void addFirst(CacheNode node){
-        node.next = head.next;
-        head.next.pre = node;
-
-        node.pre = head;
-        head.next = node;
-        size++;
-    }
-
-    public CacheNode removeLast(){
-        if (tail.pre == head)return null;
-        CacheNode node = tail.pre;
-        remove(node);
-        return node;
-    }
-
-    public void remove(CacheNode node) {
-        node.pre.next = node.next;
-        node.next.pre = node.pre;
-        size--;
     }
 }
 
-class CacheNode{
-    int key;
-    int val;
-    CacheNode pre = null;
-    CacheNode next = null;
 
-    public CacheNode(int x, int y){
-        key = x;
-        val = y;
-    }
-}
+
+
+
