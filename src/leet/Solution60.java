@@ -9,49 +9,10 @@ public class Solution60 {
     Set<Integer> set = new HashSet<>();
 
     public static void main(String[] args) {
-        int n = 3;
-        int k = 3;
+        int n = 4;
+        int k = 9;
         Solution60 solution60 = new Solution60();
-        System.out.println(solution60.getPermutation(n, k));
-    }
-
-    public String getPermutation(int n, int k) {
-        if (n == 1) return "1";
-
-        double partLength = factorial(n - 1);
-        int partNo = (int) Math.ceil(k / partLength);
-        alreadyHas = (int) ((partNo - 1) * partLength);
-
-        one.append(partNo);
-        set.add(partNo);
-        dfs(n, k);
-        return res;
-    }
-
-    private int factorial(int i) {
-        if (i == 0) return 0;
-        if (i == 1) return 1;
-        return i * factorial(i - 1);
-    }
-
-    private void dfs(int n, int k) {
-        if (set.size() == n) {
-            alreadyHas++;
-            if (alreadyHas == k) {
-                res = one.toString();
-            }
-            return;
-        }
-
-        for (int i = 1; i <= n; i++) {
-            if (!set.contains(i)) {
-                one.append(i);
-                set.add(i);
-                dfs(n, k);
-                set.remove(i);
-                one.deleteCharAt(one.length() - 1);
-            }
-        }
+        System.out.println(solution60.getPermutation2(n, k));
     }
 
     /**
@@ -75,7 +36,7 @@ public class Solution60 {
      * @param k
      * @return
      */
-    public String getPermutation2(int n, int k) {
+    public String getPermutation(int n, int k) {
         if (n == 1) return "1";
         String[] strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
         List<String> nums = new ArrayList<>(Arrays.asList(strings));
@@ -91,5 +52,36 @@ public class Solution60 {
         return res.toString();
     }
 
+    private int factorial(int i) {
+        if (i == 0) return 0;
+        if (i == 1) return 1;
+        return i * factorial(i - 1);
+    }
 
+    StringBuilder out = new StringBuilder();
+    String[] strings = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+    List<String> nums = new ArrayList<>(Arrays.asList(strings));
+
+    public String getPermutation2(int n, int k) {
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = dp[i - 1] * i;
+        }
+
+        helper(n, k, dp);
+        return out.toString();
+    }
+
+    private void helper(int n, int k, int[] dp) {
+        if (n == 1) {
+            out.append(nums.get(0));
+            return;
+        }
+
+        int groupIdx = (k - 1) / dp[n - 1];
+        out.append(nums.get(groupIdx));
+        nums.remove(groupIdx);
+        helper(n - 1, k - groupIdx * dp[n - 1], dp);
+    }
 }
