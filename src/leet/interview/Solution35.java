@@ -38,6 +38,34 @@ public class Solution35 {
         }
         return list;
     }
+
+    public Node copyRandomList2(Node head) {
+        if (head == null)return null;
+
+        Node movOld = head.next;
+        Node res = new Node(head.val);
+        Node mov = res;
+
+        Map<Node, Node> map = new HashMap<>();
+        map.put(head, mov);
+
+        while (movOld != null){
+            mov.next = new Node(movOld.val);
+            mov = mov.next;
+
+            map.put(movOld, mov);
+            movOld = movOld.next;
+        }
+        mov = res;
+        movOld = head;
+
+        while (movOld != null){
+            mov.random = map.get(movOld.random);
+            mov = mov.next;
+            movOld = movOld.next;
+        }
+        return res;
+    }
 }
 
 class Node {
