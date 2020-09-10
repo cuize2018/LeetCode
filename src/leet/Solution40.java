@@ -3,78 +3,41 @@ package leet;
 import java.util.*;
 
 public class Solution40 {
-    public static void main(String[] args){
-        int[] candidates = {2,5,2,1,2};
-        int target = 5;
-        System.out.println(combinationSum2(candidates,target));
+    public static void main(String[] args) {
+        int[] candidates = {10, 1, 2, 7, 6, 1, 5};
+        int target = 8;
+        System.out.println(new Solution40().combinationSum22(candidates, target));
     }
 
-    public static List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        List<List<Integer>> out = new ArrayList<>();
-        HashSet<List<Integer>> set = new HashSet<>();
-        if (candidates.length == 0)return out;
-        if (candidates.length == 1){
-            if (candidates[0] == target){
-                List<Integer> t = new ArrayList<>();
-                t.add(candidates[0]);
-                out.add(t);
-                return out;
-            }
-        }
+    List<List<Integer>> res = new ArrayList<>();
+    Deque<Integer> stack = new LinkedList<>();
 
+    public List<List<Integer>> combinationSum22(int[] candidates, int target) {
+        boolean[] visited = new boolean[candidates.length];
         Arrays.sort(candidates);
-        for (int i = 0;i<candidates.length;i++){
-            int[] t = Arrays.copyOfRange(candidates, i+1, candidates.length);
-            Stack<Integer> route = new Stack<>();
-            route.push(candidates[i]);
-
-            List<List<Integer>> tmp = oneSearch(set, t, route, candidates[i], target);
-            out.addAll(tmp);
-        }
-        return out;
+        dfs(candidates, target, visited, 0);
+        return res;
     }
 
-    private static List<List<Integer>> oneSearch(Set<List<Integer>> set, int[] candidates,
-                                                 Stack<Integer> num, int sum, int target){
-        List<List<Integer>> out = new ArrayList<>();
-
-        if (num.peek() == target){
-            List<Integer> tmp = new ArrayList<>(num);
-            Collections.sort(tmp);
-            if (!set.contains(tmp)) {
-                out.add(tmp);
-                set.add(tmp);
-            }
-            num.pop();
-            return out;
+    private void dfs(int[] candidates, int target, boolean[] visited, int start) {
+        if (target == 0) {
+            res.add(new ArrayList<>(stack));
+            return;
         }
 
-        for (int i = 0;i<candidates.length;i++){
-            int temp = candidates[i];
-            sum += temp;
-            num.push(temp);
+        for (int i = start; i < candidates.length; i++) {
+            if (!visited[i]) {
+                if (target - candidates[i] < 0) break;
+                if (i > start && candidates[i] == candidates[i - 1]) continue;
 
-            if (sum == target){
-                List<Integer> tmp = new ArrayList<>(num);
-                Collections.sort(tmp);
-                if (!set.contains(tmp)) {
-                    out.add(tmp);
-                    set.add(tmp);
-                }
-                num.pop();
-                break;
-            }
-            else if (sum > target){
-                num.pop();
-                break;
-            }else {
-                int[] t = Arrays.copyOfRange(candidates, i+1, candidates.length);
-                List<List<Integer>> sub_out = oneSearch(set, t, num, sum, target);
-                out.addAll(sub_out);
-                sum -= num.peek();
-                num.pop();
+                stack.addLast(candidates[i]);
+                visited[i] = true;
+
+                dfs(candidates, target - candidates[i], visited, i + 1);
+
+                visited[i] = false;
+                stack.removeLast();
             }
         }
-        return out;
     }
 }
