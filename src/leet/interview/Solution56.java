@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 public class Solution56 {
     public static void main(String[] args) {
-        int[] nums = {4, 3, 3, 1, 5, 5, 6, 4};
-        int[] x = singleNumbers(nums);
+        int[] nums = {1,2,2,5};
+        int[] x = singleNumbers3(nums);
         System.out.println(Arrays.toString(x));
     }
 
@@ -67,4 +67,24 @@ public class Solution56 {
         }
         return new int[]{group1, group2};
     }
+
+    public static int[] singleNumbers3(int[] nums) {
+        int all = 0;
+        for (int num : nums) {
+            all ^= num;
+        }
+        int temp = all & (-all);
+        int a = 0;
+        int b = 0;
+        for (int num : nums) {
+            if ((num & temp) == 0) {
+                a ^= num;
+            } else {
+                b ^= num;
+            }
+        }
+        return new int[]{a, b};
+    }
+
+
 }

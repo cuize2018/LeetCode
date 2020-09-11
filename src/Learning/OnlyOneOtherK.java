@@ -1,9 +1,9 @@
-package leet.interview;
+package Learning;
 
-public class Solution56_II {
+public class OnlyOneOtherK {
     public static void main(String[] args) {
         int[] nums = {3, 4, 3, 3};
-        System.out.println(singleNumber3(nums));
+        System.out.println(singleNumber(nums));
     }
 
     /**
@@ -21,47 +21,6 @@ public class Solution56_II {
      * @return
      */
     public static int singleNumber(int[] nums) {
-        int[] count = new int[32];
-        for (int num : nums) {
-            for (int j = 0; j < 32; j++) {
-                int bit = num & 1;
-                count[j] += bit;
-                num = num >>> 1;
-            }
-        }
-        //count数组[0,31]保存着最终结果的1-32位
-        //利用 左移操作 和 或运算 ，可将 counts 数组中各二进位的值恢复到数字 res 上
-        int res = 0;
-        for (int j = 0; j < count.length; j++) {
-            res <<= 1;
-            res = res | count[31 - j] % 3;
-        }
-        return res;
-    }
-
-    public static int singleNumber2(int[] nums) {
-        int[] count = new int[32];
-
-        for (int num : nums) {
-            for (int i = 0; i < 32; i++) {
-                int bit = num & 1;
-                count[i] += bit;
-                num = num >>> 1;
-            }
-        }
-        int res = 0;
-        int v = 1;
-        for (int i = 0; i < 32; i++) {
-            count[i] = count[i] % 3;
-            if (count[i] > 0) {
-                res += v;
-            }
-            v = v << 1;
-        }
-        return res;
-    }
-
-    public static int singleNumber3(int[] nums) {
         int[] bits = new int[32];
         for (int num : nums) {
             int i = 31;

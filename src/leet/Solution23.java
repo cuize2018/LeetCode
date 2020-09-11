@@ -22,7 +22,6 @@ import java.util.List;
  */
 public class Solution23 {
     public static void main(String[] args) {
-
     }
 
     /**
@@ -49,37 +48,54 @@ public class Solution23 {
         return merge(leftNode, rightNode);
     }
 
-    private static ListNode merge(ListNode a, ListNode b) {
-        if (a == null) return b;
-        if (b == null) return a;
+    public static ListNode mergeKLists2(ListNode[] lists) {
+        if (lists.length == 0)return null;
+        if (lists.length == 1)return lists[0];
 
-        ListNode mov = a.val <= b.val ? a : b;
-        ListNode res = mov;
+        return mergeK(lists, 0, lists.length-1);
+    }
 
-        if (a.val <= b.val) {
-            a = a.next;
-        } else {
-            b = b.next;
+    private static ListNode mergeK(ListNode[] lists, int l, int r) {
+        if (l == r)return lists[r];
+        int mid = (l+r) >>> 1;
+
+        ListNode left = mergeK(lists, l, mid - 1);
+        ListNode right = mergeK(lists, mid + 1, r);
+
+        return merge(left, right);
+    }
+
+    private static ListNode merge2List(ListNode a, ListNode b) {
+        if (a == null)return b;
+        if (b == null)return a;
+
+        if (a.val < b.val){
+            a.next = merge2List(a.next, b);
+            return a;
         }
+        else {
+            b.next = merge2List(a, b.next);
+            return b;
+        }
+    }
 
-        while (a != null && b != null) {
-            if (a.val <= b.val) {
+    private static ListNode merge(ListNode a, ListNode b) {
+        ListNode head = new ListNode(0);
+        ListNode mov = head;
+        while (a != null && b != null){
+            if (a.val <= b.val){
                 mov.next = a;
-                mov = mov.next;
                 a = a.next;
-            } else {
+            }
+            else {
                 mov.next = b;
-                mov = mov.next;
                 b = b.next;
             }
+            mov = mov.next;
         }
-        if (a != null) {
-            mov.next = a;
-        }
-        if (b != null) {
-            mov.next = b;
-        }
-        return res;
+        if (a != null)mov.next = a;
+        if (b != null)mov.next = b;
+        return head.next;
     }
 }
 
